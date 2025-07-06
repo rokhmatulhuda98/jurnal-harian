@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Harian Guru</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 30px;
+            position: relative;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(236, 240, 241, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .error {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .info {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: var(--dark);
+            font-size: 14px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .logo {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .sheet-id-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .debug-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+        
+        .debug-info h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        @media (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Jurnal Harian Guru</h1>
+            <p class="subtitle">Catat aktivitas pembelajaran Anda sehari-hari</p>
+        </header>
+        
+        <div class="sheet-id-info">
+            <strong>ID Spreadsheet Anda:</strong> 10LkZbCOhhVXAe7dYK6mdjpRRg6xDqZc531aKrz8ehWo
+        </div>
+        
+        <form id="jurnalForm">
+            <div class="form-section">
+                <h2>Informasi Guru</h2>
+                <div class="grid-container">
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap*</label>
+                        <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal*</label>
+                        <input type="date" id="tanggal" name="tanggal" required>
+                    </div>
+                </div>
+                
+                <div class="grid-container">
+                    <div class="form-group">
+                        <label for="mata_pelajaran">Mata Pelajaran*</label>
+                        <input type="text" id="mata_pelajaran" name="mata_pelajaran" required placeholder="Contoh: Matematika">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="kelas">Kelas*</label>
+                        <select id="kelas" name="kelas" required>
+                            <option value="">Pilih Kelas</option>
+                            <option value="VII">Kelas VII</option>
+                            <option value="VIII">Kelas VIII</option>
+                            <option value="IX">Kelas IX</option>
+                            <option value="X">Kelas X</option>
+                            <option value="XI">Kelas XI</option>
+                            <option value="XII">Kelas XII</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Detail Pembelajaran</h2>
+                <div class="form-group">
+                    <label for="topik">Topik Pembelajaran*</label>
+                    <input type="text" id="topik" name="topik" required placeholder="Topik yang diajarkan">
+                </div>
+                
+                <div class="form-group">
+                    <label for="aktivitas">Aktivitas Pembelajaran*</label>
+                    <textarea id="aktivitas" name="aktivitas" required placeholder="Deskripsikan kegiatan pembelajaran"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="materi">Materi Pembelajaran</label>
+                    <textarea id="materi" name="materi" placeholder="Rincian materi yang diajarkan"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Evaluasi & Catatan</h2>
+                <div class="grid-container">
+                    <div class="form-group">
+                        <label for="kehadiran">Jumlah Siswa Hadir</label>
+                        <input type="number" id="kehadiran" name="kehadiran" min="0" placeholder="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tidak_hadir">Jumlah Siswa Tidak Hadir</label>
+                        <input type="number" id="tidak_hadir" name="tidak_hadir" min="0" placeholder="0">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kendala">Kendala yang Dihadapi</label>
+                    <textarea id="kendala" name="kendala" placeholder="Masukkan kendala selama pembelajaran"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tindak_lanjut">Rencana Tindak Lanjut</label>
+                    <textarea id="tindak_lanjut" name="tindak_lanjut" placeholder="Rencana perbaikan untuk pembelajaran berikutnya"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Kirim Jurnal Harian</button>
+            <div id="successMessage" class="message success">
+                Data jurnal berhasil dikirim! Terima kasih.
+            </div>
+            <div id="errorMessage" class="message error">
+                Terjadi kesalahan. Silakan coba lagi.
+            </div>
+            <div id="infoMessage" class="message info">
+                Memproses pengiriman data...
+            </div>
+        </form>
+        
+        <div class="debug-info">
+            <h3>Informasi Debugging</h3>
+            <p><strong>URL Apps Script:</strong> <span id="scriptUrl">https://script.google.com/macros/s/AKfycbw3EDI_SVn2rV9UJJ3axJ9yy8b7suu9DGVa4M_oq-y-G957jZwUlo9X3CQjEyqVCtvN_g/exec</span></p>
+            <p><strong>Status:</strong> <span id="debugStatus">Menunggu pengiriman data...</span></p>
+            <p><strong>Catatan:</strong> Saat pertama kali mengirim, Anda perlu memberikan izin akses ke akun Google Anda.</p>
+        </div>
+        
+        <footer>
+            <div class="logo">JurnalGuru</div>
+            <p>Sistem Pencatatan Aktivitas Pembelajaran Harian</p>
+            <p>&copy; 2023 - Sekolah Menengah Atas Negeri</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Set tanggal hari ini secara otomatis
+        document.getElementById('tanggal').valueAsDate = new Date();
+        
+        // URL Apps Script untuk mengirim data ke Google Sheets
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw3EDI_SVn2rV9UJJ3axJ9yy8b7suu9DGVa4M_oq-y-G957jZwUlo9X3CQjEyqVCtvN_g/exec';
+        
+        const form = document.getElementById('jurnalForm');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const infoMessage = document.getElementById('infoMessage');
+        const debugStatus = document.getElementById('debugStatus');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btn = document.querySelector('.btn');
+        const originalBtnText = btn.textContent;
+        
+        btn.textContent = 'Mengirim...';
+        btn.disabled = true;
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+        infoMessage.style.display = 'block';
+        
+        try {
+        // 1. Konversi FormData ke object biasa
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => data[key] = value);
+        
+        // 2. Kirim sebagai form-urlencoded (lebih kompatibel)
+        const params = new URLSearchParams();
+        for (const key in data) {
+            params.append(key, data[key]);
+        }
+        
+        // 3. Gunakan URL deployment yang benar
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw3EDI_SVn2rV9UJJ3axJ9yy8b7suu9DGVa4M_oq-y-G957jZwUlo9X3CQjEyqVCtvN_g/exec';
+        
+        const response = await fetch(scriptURL, { 
+            method: 'POST',
+            body: params
+        });
+        
+        // 4. Handle response
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const result = await response.json();
+        
+        if (result.status === "success") {
+            successMessage.style.display = 'block';
+            infoMessage.style.display = 'none';
+            
+            setTimeout(() => {
+            form.reset();
+            document.getElementById('tanggal').valueAsDate = new Date();
+            successMessage.style.display = 'none';
+            }, 2000);
+        } else {
+            throw new Error(result.message || "Unknown server error");
+        }
+        } catch (error) {
+        console.error('Error!', error);
+        errorMessage.textContent = `Error: ${error.message}`;
+        errorMessage.style.display = 'block';
+        debugStatus.textContent = error.message;
+        } finally {
+        btn.textContent = originalBtnText;
+        btn.disabled = false;
+        infoMessage.style.display = 'none';
+        }
+    });
+    </script>
+</body>
+</html>
