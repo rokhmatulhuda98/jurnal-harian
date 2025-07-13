@@ -31,7 +31,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 30px auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -46,6 +46,7 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--primary);
+            position: relative;
         }
         
         h1 {
@@ -119,7 +120,6 @@
             transition: all 0.3s ease;
             font-weight: 600;
             text-align: center;
-            width: 100%;
             margin-top: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
@@ -132,6 +132,22 @@
         
         .btn:active {
             transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: var(--warning);
+        }
+        
+        .btn-secondary:hover {
+            background: #e67e22;
+        }
+        
+        .btn-danger {
+            background: var(--accent);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
         }
         
         .message {
@@ -179,17 +195,6 @@
             margin-bottom: 10px;
         }
         
-        .sheet-id-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 14px;
-            word-break: break-all;
-            border-left: 4px solid var(--primary);
-        }
-        
         .debug-info {
             background: #f8f9fa;
             padding: 15px;
@@ -204,18 +209,131 @@
             color: var(--dark);
         }
         
-        @media (max-width: 600px) {
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .nav-btn {
+            width: 48%;
+            padding: 12px;
+            font-size: 16px;
+        }
+        
+        /* Data View */
+        .data-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-container input {
+            flex-grow: 1;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f1f7fd;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            background: #eee;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
             .grid-container {
                 grid-template-columns: 1fr;
             }
             
             .container {
-                padding: 20px;
+                padding: 15px;
                 margin: 15px;
             }
             
             h1 {
                 font-size: 2rem;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                width: 100%;
             }
         }
     </style>
@@ -227,106 +345,157 @@
             <p class="subtitle">Catat aktivitas pembelajaran Anda sehari-hari</p>
         </header>
         
-        <div class="sheet-id-info">
-            <strong>ID Spreadsheet Anda:</strong> 10LkZbCOhhVXAe7dYK6mdjpRRg6xDqZc531aKrz8ehWo
+        <div class="nav-buttons">
+            <button id="viewDataBtn" class="btn btn-secondary nav-btn">Lihat Data Jurnal</button>
+            <button id="viewFormBtn" class="btn nav-btn">Tambah Jurnal Baru</button>
         </div>
         
-        <form id="jurnalForm">
-            <div class="form-section">
-                <h2>Informasi Guru</h2>
-                <div class="grid-container">
+        <!-- Form Section -->
+        <div id="formSection">
+            <div class="sheet-id-info">
+                <strong>Penyimpanan:</strong> Data disimpan di browser Anda menggunakan localStorage
+            </div>
+            
+            <form id="jurnalForm">
+                <div class="form-section">
+                    <h2>Informasi Guru</h2>
+                    <div class="grid-container">
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap*</label>
+                            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tanggal">Tanggal*</label>
+                            <input type="date" id="tanggal" name="tanggal" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-container">
+                        <div class="form-group">
+                            <label for="mata_pelajaran">Mata Pelajaran*</label>
+                            <input type="text" id="mata_pelajaran" name="mata_pelajaran" required placeholder="Contoh: Matematika">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="kelas">Kelas*</label>
+                            <select id="kelas" name="kelas" required>
+                                <option value="">Pilih Kelas</option>
+                                <option value="VII">Kelas VII</option>
+                                <option value="VIII">Kelas VIII</option>
+                                <option value="IX">Kelas IX</option>
+                                <option value="X">Kelas X</option>
+                                <option value="XI">Kelas XI</option>
+                                <option value="XII">Kelas XII</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>Detail Pembelajaran</h2>
                     <div class="form-group">
-                        <label for="nama">Nama Lengkap*</label>
-                        <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap">
+                        <label for="topik">Topik Pembelajaran*</label>
+                        <input type="text" id="topik" name="topik" required placeholder="Topik yang diajarkan">
                     </div>
                     
                     <div class="form-group">
-                        <label for="tanggal">Tanggal*</label>
-                        <input type="date" id="tanggal" name="tanggal" required>
-                    </div>
-                </div>
-                
-                <div class="grid-container">
-                    <div class="form-group">
-                        <label for="mata_pelajaran">Mata Pelajaran*</label>
-                        <input type="text" id="mata_pelajaran" name="mata_pelajaran" required placeholder="Contoh: Matematika">
+                        <label for="aktivitas">Aktivitas Pembelajaran*</label>
+                        <textarea id="aktivitas" name="aktivitas" required placeholder="Deskripsikan kegiatan pembelajaran"></textarea>
                     </div>
                     
                     <div class="form-group">
-                        <label for="kelas">Kelas*</label>
-                        <select id="kelas" name="kelas" required>
-                            <option value="">Pilih Kelas</option>
-                            <option value="VII">Kelas VII</option>
-                            <option value="VIII">Kelas VIII</option>
-                            <option value="IX">Kelas IX</option>
-                            <option value="X">Kelas X</option>
-                            <option value="XI">Kelas XI</option>
-                            <option value="XII">Kelas XII</option>
-                        </select>
+                        <label for="materi">Materi Pembelajaran</label>
+                        <textarea id="materi" name="materi" placeholder="Rincian materi yang diajarkan"></textarea>
                     </div>
                 </div>
-            </div>
-            
-            <div class="form-section">
-                <h2>Detail Pembelajaran</h2>
-                <div class="form-group">
-                    <label for="topik">Topik Pembelajaran*</label>
-                    <input type="text" id="topik" name="topik" required placeholder="Topik yang diajarkan">
-                </div>
                 
-                <div class="form-group">
-                    <label for="aktivitas">Aktivitas Pembelajaran*</label>
-                    <textarea id="aktivitas" name="aktivitas" required placeholder="Deskripsikan kegiatan pembelajaran"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="materi">Materi Pembelajaran</label>
-                    <textarea id="materi" name="materi" placeholder="Rincian materi yang diajarkan"></textarea>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h2>Evaluasi & Catatan</h2>
-                <div class="grid-container">
-                    <div class="form-group">
-                        <label for="kehadiran">Jumlah Siswa Hadir</label>
-                        <input type="number" id="kehadiran" name="kehadiran" min="0" placeholder="0">
+                <div class="form-section">
+                    <h2>Evaluasi & Catatan</h2>
+                    <div class="grid-container">
+                        <div class="form-group">
+                            <label for="kehadiran">Jumlah Siswa Hadir</label>
+                            <input type="number" id="kehadiran" name="kehadiran" min="0" placeholder="0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tidak_hadir">Jumlah Siswa Tidak Hadir</label>
+                            <input type="number" id="tidak_hadir" name="tidak_hadir" min="0" placeholder="0">
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="tidak_hadir">Jumlah Siswa Tidak Hadir</label>
-                        <input type="number" id="tidak_hadir" name="tidak_hadir" min="0" placeholder="0">
+                        <label for="kendala">Kendala yang Dihadapi</label>
+                        <textarea id="kendala" name="kendala" placeholder="Masukkan kendala selama pembelajaran"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tindak_lanjut">Rencana Tindak Lanjut</label>
+                        <textarea id="tindak_lanjut" name="tindak_lanjut" placeholder="Rencana perbaikan untuk pembelajaran berikutnya"></textarea>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="kendala">Kendala yang Dihadapi</label>
-                    <textarea id="kendala" name="kendala" placeholder="Masukkan kendala selama pembelajaran"></textarea>
+                <button type="submit" class="btn">Simpan Jurnal Harian</button>
+                <div id="successMessage" class="message success">
+                    Data jurnal berhasil disimpan! Terima kasih.
                 </div>
-                
-                <div class="form-group">
-                    <label for="tindak_lanjut">Rencana Tindak Lanjut</label>
-                    <textarea id="tindak_lanjut" name="tindak_lanjut" placeholder="Rencana perbaikan untuk pembelajaran berikutnya"></textarea>
+                <div id="errorMessage" class="message error">
+                    Terjadi kesalahan. Silakan coba lagi.
                 </div>
-            </div>
+                <div id="infoMessage" class="message info">
+                    Memproses penyimpanan data...
+                </div>
+            </form>
             
-            <button type="submit" class="btn">Kirim Jurnal Harian</button>
-            <div id="successMessage" class="message success">
-                Data jurnal berhasil dikirim! Terima kasih.
+            <div class="debug-info">
+                <h3>Informasi Penyimpanan</h3>
+                <p><strong>Metode:</strong> Data disimpan di browser Anda menggunakan localStorage</p>
+                <p><strong>Status:</strong> <span id="debugStatus">Menunggu pengiriman data...</span></p>
+                <p><strong>Catatan:</strong> Data hanya akan tersimpan di browser ini. Untuk akses di perangkat lain, gunakan sistem penyimpanan cloud.</p>
             </div>
-            <div id="errorMessage" class="message error">
-                Terjadi kesalahan. Silakan coba lagi.
-            </div>
-            <div id="infoMessage" class="message info">
-                Memproses pengiriman data...
-            </div>
-        </form>
+        </div>
         
-        <div class="debug-info">
-            <h3>Informasi Debugging</h3>
-            <p><strong>URL Apps Script:</strong> <span id="scriptUrl">https://script.google.com/macros/s/AKfycbw3EDI_SVn2rV9UJJ3axJ9yy8b7suu9DGVa4M_oq-y-G957jZwUlo9X3CQjEyqVCtvN_g/exec</span></p>
-            <p><strong>Status:</strong> <span id="debugStatus">Menunggu pengiriman data...</span></p>
-            <p><strong>Catatan:</strong> Saat pertama kali mengirim, Anda perlu memberikan izin akses ke akun Google Anda.</p>
+        <!-- Data View Section -->
+        <div id="dataSection" class="data-container">
+            <div class="data-header">
+                <h2>Data Jurnal Harian</h2>
+                <div id="entryCount">Memuat data...</div>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Cari berdasarkan nama guru, mata pelajaran, atau kelas...">
+                <button id="searchBtn" class="btn">Cari</button>
+                <button id="clearSearchBtn" class="btn btn-secondary">Reset</button>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Nama Guru</th>
+                        <th>Mata Pelajaran</th>
+                        <th>Kelas</th>
+                        <th>Topik</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody">
+                    <!-- Data akan dimasukkan di sini secara dinamis -->
+                </tbody>
+            </table>
+            
+            <div class="pagination" id="pagination">
+                <!-- Pagination akan dimasukkan di sini secara dinamis -->
+            </div>
+            
+            <div class="debug-info">
+                <h3>Detail Penyimpanan</h3>
+                <p><strong>Jumlah Entri:</strong> <span id="storageCount">0</span> jurnal tersimpan</p>
+                <p><strong>Ukuran Penyimpanan:</strong> <span id="storageSize">0 KB</span> digunakan</p>
+                <button id="exportBtn" class="btn btn-secondary">Ekspor ke JSON</button>
+                <button id="importBtn" class="btn btn-secondary">Impor dari JSON</button>
+                <button id="clearBtn" class="btn btn-danger">Hapus Semua Data</button>
+            </div>
         </div>
         
         <footer>
@@ -340,75 +509,396 @@
         // Set tanggal hari ini secara otomatis
         document.getElementById('tanggal').valueAsDate = new Date();
         
-        // URL Apps Script untuk mengirim data ke Google Sheets
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw3EDI_SVn2rV9UJJ3axJ9yy8b7suu9DGVa4M_oq-y-G957jZwUlo9X3CQjEyqVCtvN_g/exec';
-        
+        // Elemen UI
+        const formSection = document.getElementById('formSection');
+        const dataSection = document.getElementById('dataSection');
+        const viewDataBtn = document.getElementById('viewDataBtn');
+        const viewFormBtn = document.getElementById('viewFormBtn');
         const form = document.getElementById('jurnalForm');
         const successMessage = document.getElementById('successMessage');
         const errorMessage = document.getElementById('errorMessage');
         const infoMessage = document.getElementById('infoMessage');
         const debugStatus = document.getElementById('debugStatus');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        const dataBody = document.getElementById('dataBody');
+        const entryCount = document.getElementById('entryCount');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const storageCount = document.getElementById('storageCount');
+        const storageSize = document.getElementById('storageSize');
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const clearBtn = document.getElementById('clearBtn');
         
-        const btn = document.querySelector('.btn');
-        const originalBtnText = btn.textContent;
+        // Konstanta untuk pagination
+        const ITEMS_PER_PAGE = 5;
+        let currentPage = 1;
+        let currentData = [];
         
-        btn.textContent = 'Mengirim...';
-        btn.disabled = true;
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
-        infoMessage.style.display = 'block';
+        // Tampilkan form dan sembunyikan data view saat halaman dimuat
+        dataSection.style.display = 'none';
         
-        try {
-        // 1. Konversi FormData ke object biasa
-        const formData = new FormData(form);
-        const data = {};
-        formData.forEach((value, key) => data[key] = value);
-        
-        // 2. Kirim sebagai form-urlencoded (lebih kompatibel)
-        const params = new URLSearchParams();
-        for (const key in data) {
-            params.append(key, data[key]);
-        }
-        
-        // 3. Gunakan URL deployment yang benar
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw3EDI_SVn2rV9UJJ3axJ9yy8b7suu9DGVa4M_oq-y-G957jZwUlo9X3CQjEyqVCtvN_g/exec';
-        
-        const response = await fetch(scriptURL, { 
-            method: 'POST',
-            body: params
+        // Event listener untuk navigasi
+        viewDataBtn.addEventListener('click', () => {
+            formSection.style.display = 'none';
+            dataSection.style.display = 'block';
+            loadData();
         });
         
-        // 4. Handle response
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        viewFormBtn.addEventListener('click', () => {
+            formSection.style.display = 'block';
+            dataSection.style.display = 'none';
+        });
         
-        const result = await response.json();
+        // Fungsi untuk mendapatkan data dari localStorage
+        function getJournalData() {
+            const data = localStorage.getItem('journalData');
+            return data ? JSON.parse(data) : [];
+        }
         
-        if (result.status === "success") {
-            successMessage.style.display = 'block';
-            infoMessage.style.display = 'none';
+        // Fungsi untuk menyimpan data ke localStorage
+        function saveJournalData(data) {
+            localStorage.setItem('journalData', JSON.stringify(data));
+            updateStorageInfo();
+        }
+        
+        // Fungsi untuk memperbarui info penyimpanan
+        function updateStorageInfo() {
+            const data = getJournalData();
+            storageCount.textContent = data.length;
             
-            setTimeout(() => {
-            form.reset();
-            document.getElementById('tanggal').valueAsDate = new Date();
+            // Hitung ukuran penyimpanan
+            const dataSize = JSON.stringify(data).length;
+            storageSize.textContent = (dataSize / 1024).toFixed(2) + ' KB';
+        }
+        
+        // Form submission handler
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const btn = document.querySelector('.btn[type="submit"]');
+            const originalBtnText = btn.textContent;
+            
+            btn.textContent = 'Menyimpan...';
+            btn.disabled = true;
             successMessage.style.display = 'none';
-            }, 2000);
-        } else {
-            throw new Error(result.message || "Unknown server error");
+            errorMessage.style.display = 'none';
+            infoMessage.style.display = 'block';
+            debugStatus.textContent = 'Menyimpan data...';
+            
+            try {
+                // Ambil nilai form
+                const formData = {
+                    id: Date.now(), // ID unik berdasarkan timestamp
+                    nama: document.getElementById('nama').value,
+                    tanggal: document.getElementById('tanggal').value,
+                    mata_pelajaran: document.getElementById('mata_pelajaran').value,
+                    kelas: document.getElementById('kelas').value,
+                    topik: document.getElementById('topik').value,
+                    aktivitas: document.getElementById('aktivitas').value,
+                    materi: document.getElementById('materi').value,
+                    kehadiran: document.getElementById('kehadiran').value || 0,
+                    tidak_hadir: document.getElementById('tidak_hadir').value || 0,
+                    kendala: document.getElementById('kendala').value,
+                    tindak_lanjut: document.getElementById('tindak_lanjut').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Validasi data
+                if (!formData.nama || !formData.tanggal || !formData.mata_pelajaran || 
+                    !formData.kelas || !formData.topik || !formData.aktivitas) {
+                    throw new Error('Harap isi semua bidang yang wajib diisi');
+                }
+                
+                // Dapatkan data yang ada
+                const existingData = getJournalData();
+                
+                // Tambahkan data baru
+                existingData.push(formData);
+                
+                // Simpan ke localStorage
+                saveJournalData(existingData);
+                
+                // Tampilkan pesan sukses
+                successMessage.style.display = 'block';
+                infoMessage.style.display = 'none';
+                debugStatus.textContent = 'Data berhasil disimpan!';
+                
+                // Reset form setelah 2 detik
+                setTimeout(() => {
+                    form.reset();
+                    document.getElementById('tanggal').valueAsDate = new Date();
+                    successMessage.style.display = 'none';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error!', error);
+                errorMessage.textContent = `Error: ${error.message}`;
+                errorMessage.style.display = 'block';
+                debugStatus.textContent = error.message;
+            } finally {
+                btn.textContent = originalBtnText;
+                btn.disabled = false;
+                infoMessage.style.display = 'none';
+            }
+        });
+        
+        // Fungsi untuk memuat data ke tabel
+        function loadData(searchTerm = '') {
+            const journalData = getJournalData();
+            currentData = journalData;
+            
+            // Filter data jika ada pencarian
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                currentData = journalData.filter(entry => 
+                    entry.nama.toLowerCase().includes(term) ||
+                    entry.mata_pelajaran.toLowerCase().includes(term) ||
+                    entry.kelas.toLowerCase().includes(term) ||
+                    entry.topik.toLowerCase().includes(term)
+                );
+            }
+            
+            // Update jumlah entri
+            entryCount.textContent = `${currentData.length} jurnal ditemukan`;
+            
+            // Pagination
+            const totalPages = Math.ceil(currentData.length / ITEMS_PER_PAGE);
+            renderPagination(totalPages);
+            
+            // Render data untuk halaman saat ini
+            renderTableData();
+            updateStorageInfo();
         }
-        } catch (error) {
-        console.error('Error!', error);
-        errorMessage.textContent = `Error: ${error.message}`;
-        errorMessage.style.display = 'block';
-        debugStatus.textContent = error.message;
-        } finally {
-        btn.textContent = originalBtnText;
-        btn.disabled = false;
-        infoMessage.style.display = 'none';
+        
+        // Fungsi untuk merender data tabel
+        function renderTableData() {
+            dataBody.innerHTML = '';
+            
+            if (currentData.length === 0) {
+                dataBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Tidak ada data jurnal</td></tr>';
+                return;
+            }
+            
+            // Hitung indeks untuk halaman saat ini
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, currentData.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const entry = currentData[i];
+                const row = document.createElement('tr');
+                
+                // Format tanggal menjadi DD/MM/YYYY
+                const date = new Date(entry.tanggal);
+                const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${entry.nama}</td>
+                    <td>${entry.mata_pelajaran}</td>
+                    <td>${entry.kelas}</td>
+                    <td>${entry.topik}</td>
+                    <td class="action-buttons">
+                        <button class="btn action-btn view-btn" data-id="${entry.id}">Lihat</button>
+                        <button class="btn btn-danger action-btn delete-btn" data-id="${entry.id}">Hapus</button>
+                    </td>
+                `;
+                
+                dataBody.appendChild(row);
+            }
+            
+            // Tambahkan event listener untuk tombol
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => viewEntry(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => deleteEntry(btn.dataset.id));
+            });
         }
-    });
+        
+        // Fungsi untuk merender pagination
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) return;
+            
+            // Tombol sebelumnya
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.textContent = '«';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTableData();
+                }
+            });
+            pagination.appendChild(prevBtn);
+            
+            // Tombol nomor halaman
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTableData();
+                });
+                pagination.appendChild(pageBtn);
+            }
+            
+            // Tombol selanjutnya
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.textContent = '»';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTableData();
+                }
+            });
+            pagination.appendChild(nextBtn);
+        }
+        
+        // Fungsi untuk melihat detail entri
+        function viewEntry(id) {
+            const journalData = getJournalData();
+            const entry = journalData.find(item => item.id == id);
+            
+            if (!entry) {
+                alert('Entri tidak ditemukan!');
+                return;
+            }
+            
+            // Format tanggal menjadi DD/MM/YYYY
+            const date = new Date(entry.tanggal);
+            const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+            
+            // Tampilkan detail dalam alert (bisa diganti dengan modal yang lebih baik)
+            alert(`
+                Detail Jurnal Pembelajaran
+                ============================
+                Tanggal: ${formattedDate}
+                Nama Guru: ${entry.nama}
+                Mata Pelajaran: ${entry.mata_pelajaran}
+                Kelas: ${entry.kelas}
+                Topik: ${entry.topik}
+                
+                Aktivitas Pembelajaran:
+                ${entry.aktivitas}
+                
+                Materi Pembelajaran:
+                ${entry.materi || '-'}
+                
+                Kehadiran:
+                Hadir: ${entry.kehadiran}, Tidak Hadir: ${entry.tidak_hadir}
+                
+                Kendala:
+                ${entry.kendala || '-'}
+                
+                Rencana Tindak Lanjut:
+                ${entry.tindak_lanjut || '-'}
+            `);
+        }
+        
+        // Fungsi untuk menghapus entri
+        function deleteEntry(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus entri ini?')) return;
+            
+            const journalData = getJournalData();
+            const updatedData = journalData.filter(item => item.id != id);
+            
+            saveJournalData(updatedData);
+            loadData(); // Refresh data view
+        }
+        
+        // Event listener untuk pencarian
+        searchBtn.addEventListener('click', () => {
+            currentPage = 1;
+            loadData(searchInput.value);
+        });
+        
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            currentPage = 1;
+            loadData();
+        });
+        
+        // Event listener untuk ekspor data
+        exportBtn.addEventListener('click', () => {
+            const journalData = getJournalData();
+            const dataStr = JSON.stringify(journalData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `jurnal-guru-${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+        
+        // Event listener untuk impor data
+        importBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = event => {
+                    try {
+                        const importedData = JSON.parse(event.target.result);
+                        
+                        if (!Array.isArray(importedData)) {
+                            throw new Error('Format file tidak valid');
+                        }
+                        
+                        // Gabungkan dengan data yang ada (mengganti entri dengan ID yang sama)
+                        const existingData = getJournalData();
+                        const combinedData = [...existingData];
+                        
+                        importedData.forEach(newEntry => {
+                            const existingIndex = existingData.findIndex(e => e.id === newEntry.id);
+                            if (existingIndex !== -1) {
+                                combinedData[existingIndex] = newEntry;
+                            } else {
+                                combinedData.push(newEntry);
+                            }
+                        });
+                        
+                        saveJournalData(combinedData);
+                        loadData();
+                        alert(`Data berhasil diimpor! ${importedData.length} entri diproses.`);
+                    } catch (error) {
+                        alert(`Error mengimpor data: ${error.message}`);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        });
+        
+        // Event listener untuk menghapus semua data
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data jurnal?')) {
+                localStorage.removeItem('journalData');
+                loadData();
+                alert('Semua data jurnal telah dihapus.');
+            }
+        });
+        
+        // Inisialisasi penyimpanan info saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStorageInfo();
+        });
     </script>
 </body>
 </html>
