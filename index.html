@@ -3,337 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jurnal Harian Guru</title>
+    <title>Sistem Pencatatan Ngaji Santri</title>
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2980b9;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
-        }
-        
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #1a2980, #26d0ce);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e5a3a 0%, #2a7a4d 100%);
             min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            padding: 30px;
-            position: relative;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--primary);
-            position: relative;
-        }
-        
-        h1 {
-            color: var(--dark);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #1a2980, #26d0ce);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .subtitle {
-            color: var(--secondary);
-            font-size: 1.2rem;
-        }
-        
-        .form-section {
-            margin-bottom: 25px;
             padding: 20px;
-            background: rgba(236, 240, 241, 0.3);
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        header {
+            background: linear-gradient(135deg, #2E8B57 0%, #32CD32 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><polygon fill="rgba(255,255,255,0.1)" points="0,100 1000,0 1000,100"/></svg>');
+            background-size: cover;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .form-section {
+            background: linear-gradient(135deg, #f8fff8 0%, #e8f8e8 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .entries-section {
+            background: linear-gradient(135deg, #fff8f0 0%, #f0fff0 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .filter-section {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+
+        h3 {
+            color: #2E8B57;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--dark);
+            color: #555;
         }
-        
-        input, select, textarea {
+
+        input, textarea, select {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
         }
-        
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
+
+        input:focus, textarea:focus, select:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: #2E8B57;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
         }
-        
+
         textarea {
-            min-height: 120px;
             resize: vertical;
+            min-height: 100px;
         }
-        
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
+
         .btn {
-            display: inline-block;
-            background: var(--primary);
+            background: linear-gradient(135deg, #2E8B57 0%, #32CD32 100%);
             color: white;
+            padding: 12px 30px;
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
             border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 600;
-            text-align: center;
+            width: 100%;
             margin-top: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
+
         .btn:hover {
-            background: var(--secondary);
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 20px rgba(46, 139, 87, 0.3);
         }
-        
+
         .btn:active {
             transform: translateY(0);
         }
-        
+
         .btn-secondary {
-            background: var(--warning);
+            background: linear-gradient(135deg, #4682B4 0%, #5F9EA0 100%);
+            margin-top: 10px;
         }
-        
+
         .btn-secondary:hover {
-            background: #e67e22;
+            box-shadow: 0 10px 20px rgba(70, 130, 180, 0.3);
         }
-        
-        .btn-danger {
-            background: var(--accent);
+
+        .btn-clear {
+            background: linear-gradient(135deg, #FF6347 0%, #FF7F50 100%);
+            margin-top: 10px;
         }
-        
-        .btn-danger:hover {
-            background: #c0392b;
+
+        .btn-clear:hover {
+            box-shadow: 0 10px 20px rgba(255, 99, 71, 0.3);
         }
-        
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        
-        .success {
-            background-color: var(--success);
-            color: white;
-        }
-        
-        .error {
-            background-color: var(--accent);
-            color: white;
-        }
-        
-        .info {
-            background-color: var(--warning);
-            color: white;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            color: var(--dark);
-            font-size: 14px;
-            border-top: 1px solid #ddd;
-        }
-        
-        .logo {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .debug-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-        }
-        
-        .debug-info h3 {
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-        
-        /* Navigation */
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
+
+        .entry-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #2E8B57;
         }
-        
-        .nav-btn {
-            width: 48%;
-            padding: 12px;
-            font-size: 16px;
+
+        .entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
-        
-        /* Data View */
-        .data-container {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        
-        .data-header {
+
+        .entry-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-        
-        .search-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .search-container input {
-            flex-grow: 1;
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .data-table th {
-            background: var(--primary);
+
+        .entry-name {
+            background: linear-gradient(135deg, #2E8B57 0%, #32CD32 100%);
             color: white;
-            text-align: left;
-            padding: 12px 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: inline-block;
         }
-        
-        .data-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
+
+        .entry-datetime {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
         }
-        
-        .data-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+
+        .entry-quran {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid #2E8B57;
         }
-        
-        .data-table tr:hover {
-            background-color: #f1f7fd;
+
+        .quran-info {
+            font-weight: 600;
+            color: #2E8B57;
+            font-size: 1.2em;
+            margin-bottom: 5px;
         }
-        
-        .action-buttons {
-            display: flex;
-            gap: 5px;
+
+        .entry-notes {
+            color: #666;
+            line-height: 1.6;
+            margin-top: 10px;
+            font-style: italic;
         }
-        
-        .action-btn {
-            padding: 5px 10px;
-            font-size: 14px;
-            border-radius: 4px;
+
+        .delete-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
-        
-        .pagination {
-            display: flex;
+
+        .delete-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+        }
+
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .student-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .progress-summary {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Modal Login */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
             justify-content: center;
-            gap: 5px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2E8B57;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #2E8B57 0%, #32CD32 100%);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
             margin-top: 20px;
         }
-        
-        .page-btn {
-            padding: 8px 15px;
-            background: #eee;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(46, 139, 87, 0.3);
         }
-        
-        .page-btn.active {
-            background: var(--primary);
+
+        .logout-btn {
+            background: linear-gradient(135deg, #FF6347 0%, #FF7F50 100%);
             color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
         }
-        
-        /* Responsive */
+
+        .logout-btn:hover {
+            box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
+        }
+
         @media (max-width: 768px) {
-            .grid-container {
+            .main-content {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
             
             .container {
-                padding: 15px;
-                margin: 15px;
+                margin: 10px;
+            }
+            
+            header {
+                padding: 20px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2em;
             }
             
-            .data-table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            .nav-buttons {
+            .entry-header {
                 flex-direction: column;
+                align-items: flex-start;
                 gap: 10px;
-            }
-            
-            .nav-btn {
-                width: 100%;
             }
         }
     </style>
@@ -341,564 +399,468 @@
 <body>
     <div class="container">
         <header>
-            <h1>Jurnal Harian Guru</h1>
-            <p class="subtitle">Catat aktivitas pembelajaran Anda sehari-hari</p>
+            <h1>🕌 Sistem Pencatatan Ngaji Santri</h1>
+            <p class="subtitle">Pencatatan Setoran Al-Qur'an Santri</p>
+            <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
         </header>
-        
-        <div class="nav-buttons">
-            <button id="viewDataBtn" class="btn btn-secondary nav-btn">Lihat Data Jurnal</button>
-            <button id="viewFormBtn" class="btn nav-btn">Tambah Jurnal Baru</button>
-        </div>
-        
-        <!-- Form Section -->
-        <div id="formSection">
-            <div class="sheet-id-info">
-                <strong>Penyimpanan:</strong> Data disimpan di browser Anda menggunakan localStorage
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Input Setoran Baru</h2>
+                <div id="message"></div>
+                
+                <form id="ngajiForm">
+                    <div class="form-group">
+                        <label for="studentName">Nama Santri:</label>
+                        <input type="text" id="studentName" name="studentName" required placeholder="Nama lengkap santri">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="juz">Juz:</label>
+                        <select id="juz" name="juz" required>
+                            <option value="">Pilih Juz</option>
+                            <option value="1">Juz 1 (Al-Baqarah 1-141)</option>
+                            <option value="2">Juz 2 (Al-Baqarah 142-252)</option>
+                            <option value="3">Juz 3 (Al-Baqarah 253 - Ali Imran 92)</option>
+                            <option value="4">Juz 4 (Ali Imran 93 - An-Nisa 23)</option>
+                            <option value="5">Juz 5 (An-Nisa 24-147)</option>
+                            <option value="6">Juz 6 (An-Nisa 148 - Al-Maidah 81)</option>
+                            <option value="7">Juz 7 (Al-Maidah 82 - Al-An'am 110)</option>
+                            <option value="8">Juz 8 (Al-An'am 111 - Al-A'raf 87)</option>
+                            <option value="9">Juz 9 (Al-A'raf 88 - Al-Anfal 40)</option>
+                            <option value="10">Juz 10 (Al-Anfal 41 - At-Taubah 92)</option>
+                            <option value="11">Juz 11 (At-Taubah 93 - Hud 5)</option>
+                            <option value="12">Juz 12 (Hud 6 - Yusuf 52)</option>
+                            <option value="13">Juz 13 (Yusuf 53 - Ibrahim 52)</option>
+                            <option value="14">Juz 14 (Al-Hijr 1 - An-Nahl 128)</option>
+                            <option value="15">Juz 15 (Al-Isra 1 - Al-Kahf 74)</option>
+                            <option value="16">Juz 16 (Al-Kahf 75 - Taha 135)</option>
+                            <option value="17">Juz 17 (Al-Anbiya 1 - Al-Hajj 78)</option>
+                            <option value="18">Juz 18 (Al-Mu'minun 1 - Al-Furqan 20)</option>
+                            <option value="19">Juz 19 (Al-Furqan 21 - An-Naml 55)</option>
+                            <option value="20">Juz 20 (An-Naml 56 - Al-Ankabut 45)</option>
+                            <option value="21">Juz 21 (Al-Ankabut 46 - Al-Ahzab 30)</option>
+                            <option value="22">Juz 22 (Al-Ahzab 31 - Yasin 27)</option>
+                            <option value="23">Juz 23 (Yasin 28 - Az-Zumar 31)</option>
+                            <option value="24">Juz 24 (Az-Zumar 32 - Fussilat 46)</option>
+                            <option value="25">Juz 25 (Fussilat 47 - Al-Jathiyah 37)</option>
+                            <option value="26">Juz 26 (Al-Ahqaf 1 - Az-Zariyat 30)</option>
+                            <option value="27">Juz 27 (Az-Zariyat 31 - Al-Hadid 29)</option>
+                            <option value="28">Juz 28 (Al-Mujadila 1 - At-Tahrim 12)</option>
+                            <option value="29">Juz 29 (Al-Mulk 1 - Al-Mursalat 50)</option>
+                            <option value="30">Juz 30 (An-Naba 1 - An-Nas 6)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startPage">Halaman Awal:</label>
+                        <input type="number" id="startPage" name="startPage" required min="1" max="604" placeholder="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endPage">Halaman Akhir:</label>
+                        <input type="number" id="endPage" name="endPage" required min="1" max="604" placeholder="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Catatan (Opsional):</label>
+                        <textarea id="notes" name="notes" placeholder="Catatan tambahan, evaluasi bacaan, dll..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">📝 Simpan Setoran</button>
+                </form>
             </div>
-            
-            <form id="jurnalForm">
-                <div class="form-section">
-                    <h2>Informasi Guru</h2>
-                    <div class="grid-container">
-                        <div class="form-group">
-                            <label for="nama">Nama Lengkap*</label>
-                            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="tanggal">Tanggal*</label>
-                            <input type="date" id="tanggal" name="tanggal" required>
-                        </div>
+
+            <div class="entries-section">
+                <div class="filter-section">
+                    <h3>Filter Data</h3>
+                    <div class="form-group">
+                        <label for="filterStudent">Pilih Santri:</label>
+                        <select id="filterStudent">
+                            <option value="">Semua Santri</option>
+                        </select>
                     </div>
-                    
-                    <div class="grid-container">
-                        <div class="form-group">
-                            <label for="mata_pelajaran">Mata Pelajaran*</label>
-                            <input type="text" id="mata_pelajaran" name="mata_pelajaran" required placeholder="Contoh: Matematika">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="kelas">Kelas*</label>
-                            <select id="kelas" name="kelas" required>
-                                <option value="">Pilih Kelas</option>
-                                <option value="VII">Kelas VII</option>
-                                <option value="VIII">Kelas VIII</option>
-                                <option value="IX">Kelas IX</option>
-                                <option value="X">Kelas X</option>
-                                <option value="XI">Kelas XI</option>
-                                <option value="XII">Kelas XII</option>
-                            </select>
-                        </div>
-                    </div>
+                    <button class="btn btn-secondary" id="showDataBtn">🔍 Tampilkan Data</button>
+                    <button class="btn btn-clear" onclick="clearFilter()">🔄 Tampilkan Semua</button>
                 </div>
+
+                <div id="progressSummary"></div>
                 
-                <div class="form-section">
-                    <h2>Detail Pembelajaran</h2>
-                    <div class="form-group">
-                        <label for="topik">Topik Pembelajaran*</label>
-                        <input type="text" id="topik" name="topik" required placeholder="Topik yang diajarkan">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="aktivitas">Aktivitas Pembelajaran*</label>
-                        <textarea id="aktivitas" name="aktivitas" required placeholder="Deskripsikan kegiatan pembelajaran"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="materi">Materi Pembelajaran</label>
-                        <textarea id="materi" name="materi" placeholder="Rincian materi yang diajarkan"></textarea>
-                    </div>
+                <h2>Data Setoran</h2>
+                <div class="student-list" id="entriesList">
+                    <div class="loading">Silakan login untuk melihat data.</div>
                 </div>
-                
-                <div class="form-section">
-                    <h2>Evaluasi & Catatan</h2>
-                    <div class="grid-container">
-                        <div class="form-group">
-                            <label for="kehadiran">Jumlah Siswa Hadir</label>
-                            <input type="number" id="kehadiran" name="kehadiran" min="0" placeholder="0">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="tidak_hadir">Jumlah Siswa Tidak Hadir</label>
-                            <input type="number" id="tidak_hadir" name="tidak_hadir" min="0" placeholder="0">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="kendala">Kendala yang Dihadapi</label>
-                        <textarea id="kendala" name="kendala" placeholder="Masukkan kendala selama pembelajaran"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="tindak_lanjut">Rencana Tindak Lanjut</label>
-                        <textarea id="tindak_lanjut" name="tindak_lanjut" placeholder="Rencana perbaikan untuk pembelajaran berikutnya"></textarea>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn">Simpan Jurnal Harian</button>
-                <div id="successMessage" class="message success">
-                    Data jurnal berhasil disimpan! Terima kasih.
-                </div>
-                <div id="errorMessage" class="message error">
-                    Terjadi kesalahan. Silakan coba lagi.
-                </div>
-                <div id="infoMessage" class="message info">
-                    Memproses penyimpanan data...
-                </div>
-            </form>
-            
-            <div class="debug-info">
-                <h3>Informasi Penyimpanan</h3>
-                <p><strong>Metode:</strong> Data disimpan di browser Anda menggunakan localStorage</p>
-                <p><strong>Status:</strong> <span id="debugStatus">Menunggu pengiriman data...</span></p>
-                <p><strong>Catatan:</strong> Data hanya akan tersimpan di browser ini. Untuk akses di perangkat lain, gunakan sistem penyimpanan cloud.</p>
             </div>
         </div>
-        
-        <!-- Data View Section -->
-        <div id="dataSection" class="data-container">
-            <div class="data-header">
-                <h2>Data Jurnal Harian</h2>
-                <div id="entryCount">Memuat data...</div>
-            </div>
-            
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Cari berdasarkan nama guru, mata pelajaran, atau kelas...">
-                <button id="searchBtn" class="btn">Cari</button>
-                <button id="clearSearchBtn" class="btn btn-secondary">Reset</button>
-            </div>
-            
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Nama Guru</th>
-                        <th>Mata Pelajaran</th>
-                        <th>Kelas</th>
-                        <th>Topik</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="dataBody">
-                    <!-- Data akan dimasukkan di sini secara dinamis -->
-                </tbody>
-            </table>
-            
-            <div class="pagination" id="pagination">
-                <!-- Pagination akan dimasukkan di sini secara dinamis -->
-            </div>
-            
-            <div class="debug-info">
-                <h3>Detail Penyimpanan</h3>
-                <p><strong>Jumlah Entri:</strong> <span id="storageCount">0</span> jurnal tersimpan</p>
-                <p><strong>Ukuran Penyimpanan:</strong> <span id="storageSize">0 KB</span> digunakan</p>
-                <button id="exportBtn" class="btn btn-secondary">Ekspor ke JSON</button>
-                <button id="importBtn" class="btn btn-secondary">Impor dari JSON</button>
-                <button id="clearBtn" class="btn btn-danger">Hapus Semua Data</button>
-            </div>
-        </div>
-        
-        <footer>
-            <div class="logo">JurnalGuru</div>
-            <p>Sistem Pencatatan Aktivitas Pembelajaran Harian</p>
-            <p>&copy; 2023 - Sekolah Menengah Atas Negeri</p>
-        </footer>
     </div>
-    
+
+    <!-- Modal Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 class="login-title">Login Admin</h2>
+            <div id="loginMessage"></div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required placeholder="Masukkan username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required placeholder="Masukkan password">
+            </div>
+            <button class="login-btn" onclick="login()">Login</button>
+        </div>
+    </div>
+
     <script>
-        // Set tanggal hari ini secara otomatis
-        document.getElementById('tanggal').valueAsDate = new Date();
-        
-        // Elemen UI
-        const formSection = document.getElementById('formSection');
-        const dataSection = document.getElementById('dataSection');
-        const viewDataBtn = document.getElementById('viewDataBtn');
-        const viewFormBtn = document.getElementById('viewFormBtn');
-        const form = document.getElementById('jurnalForm');
-        const successMessage = document.getElementById('successMessage');
-        const errorMessage = document.getElementById('errorMessage');
-        const infoMessage = document.getElementById('infoMessage');
-        const debugStatus = document.getElementById('debugStatus');
-        const dataBody = document.getElementById('dataBody');
-        const entryCount = document.getElementById('entryCount');
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const clearSearchBtn = document.getElementById('clearSearchBtn');
-        const storageCount = document.getElementById('storageCount');
-        const storageSize = document.getElementById('storageSize');
-        const exportBtn = document.getElementById('exportBtn');
-        const importBtn = document.getElementById('importBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        
-        // Konstanta untuk pagination
-        const ITEMS_PER_PAGE = 5;
-        let currentPage = 1;
-        let currentData = [];
-        
-        // Tampilkan form dan sembunyikan data view saat halaman dimuat
-        dataSection.style.display = 'none';
-        
-        // Event listener untuk navigasi
-        viewDataBtn.addEventListener('click', () => {
-            formSection.style.display = 'none';
-            dataSection.style.display = 'block';
-            loadData();
-        });
-        
-        viewFormBtn.addEventListener('click', () => {
-            formSection.style.display = 'block';
-            dataSection.style.display = 'none';
-        });
-        
-        // Fungsi untuk mendapatkan data dari localStorage
-        function getJournalData() {
-            const data = localStorage.getItem('journalData');
-            return data ? JSON.parse(data) : [];
+        // Simulasi data untuk demo
+        const demoData = [
+            {
+                id: "1",
+                studentName: "Ahmad Fauzi",
+                juz: "1",
+                startPage: 1,
+                endPage: 5,
+                notes: "Bacaan sudah bagus, perlu perbaikan tajwid pada halaman 3",
+                timestamp: new Date(Date.now() - 86400000 * 2) // 2 hari lalu
+            },
+            {
+                id: "2",
+                studentName: "Siti Rahayu",
+                juz: "2",
+                startPage: 12,
+                endPage: 15,
+                notes: "Hafalan lancar, perlu menambah kecepatan",
+                timestamp: new Date(Date.now() - 86400000) // 1 hari lalu
+            },
+            {
+                id: "3",
+                studentName: "Budi Santoso",
+                juz: "3",
+                startPage: 20,
+                endPage: 25,
+                notes: "Masih ada kesalahan pada halaman 22 dan 24",
+                timestamp: new Date()
+            },
+            {
+                id: "4",
+                studentName: "Ahmad Fauzi",
+                juz: "1",
+                startPage: 6,
+                endPage: 10,
+                notes: "Perbaikan tajwid sudah lebih baik",
+                timestamp: new Date(Date.now() - 86400000 * 4) // 4 hari lalu
+            },
+            {
+                id: "5",
+                studentName: "Dewi Anggraini",
+                juz: "5",
+                startPage: 30,
+                endPage: 35,
+                notes: "Bacaan sangat lancar dan tajwid baik",
+                timestamp: new Date(Date.now() - 86400000 * 3) // 3 hari lalu
+            }
+        ];
+
+        // DOM elements
+        const form = document.getElementById('ngajiForm');
+        const entriesList = document.getElementById('entriesList');
+        const messageDiv = document.getElementById('message');
+        const filterStudent = document.getElementById('filterStudent');
+        const progressSummary = document.getElementById('progressSummary');
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+        const showDataBtn = document.getElementById('showDataBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginMessage = document.getElementById('loginMessage');
+
+        let allEntries = [];
+        let isAdminLoggedIn = false;
+
+        // Show message
+        function showMessage(message, type = 'success') {
+            messageDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
         }
-        
-        // Fungsi untuk menyimpan data ke localStorage
-        function saveJournalData(data) {
-            localStorage.setItem('journalData', JSON.stringify(data));
-            updateStorageInfo();
+
+        // Format date time to Indonesian
+        function formatDateTime(date) {
+            return date.toLocaleString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
-        
-        // Fungsi untuk memperbarui info penyimpanan
-        function updateStorageInfo() {
-            const data = getJournalData();
-            storageCount.textContent = data.length;
+
+        // Get Juz name
+        function getJuzName(juzNumber) {
+            const juzNames = {
+                '1': 'Juz 1 (Al-Baqarah 1-141)',
+                '2': 'Juz 2 (Al-Baqarah 142-252)',
+                '3': 'Juz 3 (Al-Baqarah 253 - Ali Imran 92)',
+                '4': 'Juz 4 (Ali Imran 93 - An-Nisa 23)',
+                '5': 'Juz 5 (An-Nisa 24-147)',
+                '6': 'Juz 6 (An-Nisa 148 - Al-Maidah 81)',
+                '7': 'Juz 7 (Al-Maidah 82 - Al-An\'am 110)',
+                '8': 'Juz 8 (Al-An\'am 111 - Al-A\'raf 87)',
+                '9': 'Juz 9 (Al-A\'raf 88 - Al-Anfal 40)',
+                '10': 'Juz 10 (Al-Anfal 41 - At-Taubah 92)',
+                '11': 'Juz 11 (At-Taubah 93 - Hud 5)',
+                '12': 'Juz 12 (Hud 6 - Yusuf 52)',
+                '13': 'Juz 13 (Yusuf 53 - Ibrahim 52)',
+                '14': 'Juz 14 (Al-Hijr 1 - An-Nahl 128)',
+                '15': 'Juz 15 (Al-Isra 1 - Al-Kahf 74)',
+                '16': 'Juz 16 (Al-Kahf 75 - Taha 135)',
+                '17': 'Juz 17 (Al-Anbiya 1 - Al-Hajj 78)',
+                '18': 'Juz 18 (Al-Mu\'minun 1 - Al-Furqan 20)',
+                '19': 'Juz 19 (Al-Furqan 21 - An-Naml 55)',
+                '20': 'Juz 20 (An-Naml 56 - Al-Ankabut 45)',
+                '21': 'Juz 21 (Al-Ankabut 46 - Al-Ahzab 30)',
+                '22': 'Juz 22 (Al-Ahzab 31 - Yasin 27)',
+                '23': 'Juz 23 (Yasin 28 - Az-Zumar 31)',
+                '24': 'Juz 24 (Az-Zumar 32 - Fussilat 46)',
+                '25': 'Juz 25 (Fussilat 47 - Al-Jathiyah 37)',
+                '26': 'Juz 26 (Al-Ahqaf 1 - Az-Zariyat 30)',
+                '27': 'Juz 27 (Az-Zariyat 31 - Al-Hadid 29)',
+                '28': 'Juz 28 (Al-Mujadila 1 - At-Tahrim 12)',
+                '29': 'Juz 29 (Al-Mulk 1 - Al-Mursalat 50)',
+                '30': 'Juz 30 (An-Naba 1 - An-Nas 6)'
+            };
+            return juzNames[juzNumber] || `Juz ${juzNumber}`;
+        }
+
+        // Calculate progress summary for a student
+        function calculateProgress(studentEntries) {
+            const totalPages = studentEntries.reduce((sum, entry) => {
+                return sum + (parseInt(entry.endPage) - parseInt(entry.startPage) + 1);
+            }, 0);
             
-            // Hitung ukuran penyimpanan
-            const dataSize = JSON.stringify(data).length;
-            storageSize.textContent = (dataSize / 1024).toFixed(2) + ' KB';
+            const uniqueJuz = [...new Set(studentEntries.map(entry => entry.juz))];
+            
+            return {
+                totalPages,
+                totalJuz: uniqueJuz.length,
+                totalEntries: studentEntries.length
+            };
         }
-        
-        // Form submission handler
+
+        // Update student filter dropdown
+        function updateStudentFilter() {
+            const uniqueNames = [...new Set(allEntries.map(entry => entry.studentName))].sort();
+            
+            filterStudent.innerHTML = '<option value="">Semua Santri</option>';
+            uniqueNames.forEach(name => {
+                filterStudent.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+        }
+
+        // Add ngaji entry
+        function addEntry(entryData) {
+            // Simulasi penyimpanan data
+            const newEntry = {
+                id: Date.now().toString(),
+                ...entryData,
+                timestamp: new Date()
+            };
+            
+            allEntries.unshift(newEntry);
+            showMessage('Setoran berhasil disimpan!', 'success');
+            form.reset();
+            
+            // Update UI jika sudah login
+            if (isAdminLoggedIn) {
+                displayEntries(allEntries);
+                updateStudentFilter();
+            }
+        }
+
+        // Load entries
+        function loadEntries() {
+            // Untuk demo, gunakan data yang sudah ada
+            allEntries = [...demoData];
+            updateStudentFilter();
+            
+            if (isAdminLoggedIn) {
+                displayEntries(allEntries);
+            }
+        }
+
+        // Display entries
+        function displayEntries(entries) {
+            if (entries.length === 0) {
+                entriesList.innerHTML = '<div class="loading">Belum ada data setoran.</div>';
+                progressSummary.innerHTML = '';
+                return;
+            }
+
+            // Show progress summary if filtering by student
+            const selectedStudent = filterStudent.value;
+            if (selectedStudent) {
+                const studentEntries = entries.filter(entry => entry.studentName === selectedStudent);
+                const progress = calculateProgress(studentEntries);
+                
+                progressSummary.innerHTML = `
+                    <div class="progress-summary">
+                        📊 Ringkasan Progress ${selectedStudent}<br>
+                        📖 Total Halaman: ${progress.totalPages} | 
+                        📚 Total Juz: ${progress.totalJuz} | 
+                        📝 Total Setoran: ${progress.totalEntries}
+                    </div>
+                `;
+            } else {
+                progressSummary.innerHTML = '';
+            }
+
+            let entriesHTML = '';
+            entries.forEach((entry) => {
+                const pageCount = parseInt(entry.endPage) - parseInt(entry.startPage) + 1;
+                entriesHTML += `
+                    <div class="entry-card">
+                        <div class="entry-header">
+                            <div class="entry-name">${entry.studentName}</div>
+                            <div class="entry-datetime">${formatDateTime(entry.timestamp)}</div>
+                            <button class="delete-btn" onclick="deleteEntry('${entry.id}')">🗑️</button>
+                        </div>
+                        <div class="entry-quran">
+                            <div class="quran-info">📖 ${getJuzName(entry.juz)}</div>
+                            <div>📄 Halaman ${entry.startPage} - ${entry.endPage} (${pageCount} halaman)</div>
+                        </div>
+                        ${entry.notes ? `<div class="entry-notes">💬 ${entry.notes}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            entriesList.innerHTML = entriesHTML;
+        }
+
+        // Filter by student
+        function filterByStudent() {
+            if (!isAdminLoggedIn) {
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            const selectedStudent = filterStudent.value;
+            if (selectedStudent) {
+                const filteredEntries = allEntries.filter(entry => entry.studentName === selectedStudent);
+                displayEntries(filteredEntries);
+            } else {
+                displayEntries(allEntries);
+            }
+        }
+
+        // Clear filter
+        function clearFilter() {
+            if (!isAdminLoggedIn) {
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            filterStudent.value = '';
+            displayEntries(allEntries);
+        }
+
+        // Delete entry
+        function deleteEntry(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data setoran ini?')) {
+                allEntries = allEntries.filter(entry => entry.id !== id);
+                showMessage('Data setoran berhasil dihapus!', 'success');
+                displayEntries(allEntries);
+                updateStudentFilter();
+            }
+        }
+
+        // Form validation
+        function validateForm(formData) {
+            const startPage = parseInt(formData.get('startPage'));
+            const endPage = parseInt(formData.get('endPage'));
+            
+            if (startPage > endPage) {
+                showMessage('Halaman awal tidak boleh lebih besar dari halaman akhir!', 'error');
+                return false;
+            }
+            
+            if (startPage < 1 || endPage < 1 || startPage > 604 || endPage > 604) {
+                showMessage('Nomor halaman harus antara 1-604!', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Login function
+        function login() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            // Validasi login
+            if (username === 'admin' && password === 'admin123') {
+                isAdminLoggedIn = true;
+                loginModal.style.display = 'none';
+                loginMessage.innerHTML = '';
+                logoutBtn.style.display = 'block';
+                
+                // Tampilkan data setelah login
+                loadEntries();
+                filterByStudent();
+            } else {
+                loginMessage.innerHTML = '<div class="error">Username atau password salah!</div>';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            isAdminLoggedIn = false;
+            logoutBtn.style.display = 'none';
+            entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
+            progressSummary.innerHTML = '';
+        }
+
+        // Event Listeners
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const btn = document.querySelector('.btn[type="submit"]');
-            const originalBtnText = btn.textContent;
+            const formData = new FormData(form);
             
-            btn.textContent = 'Menyimpan...';
-            btn.disabled = true;
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-            infoMessage.style.display = 'block';
-            debugStatus.textContent = 'Menyimpan data...';
-            
-            try {
-                // Ambil nilai form
-                const formData = {
-                    id: Date.now(), // ID unik berdasarkan timestamp
-                    nama: document.getElementById('nama').value,
-                    tanggal: document.getElementById('tanggal').value,
-                    mata_pelajaran: document.getElementById('mata_pelajaran').value,
-                    kelas: document.getElementById('kelas').value,
-                    topik: document.getElementById('topik').value,
-                    aktivitas: document.getElementById('aktivitas').value,
-                    materi: document.getElementById('materi').value,
-                    kehadiran: document.getElementById('kehadiran').value || 0,
-                    tidak_hadir: document.getElementById('tidak_hadir').value || 0,
-                    kendala: document.getElementById('kendala').value,
-                    tindak_lanjut: document.getElementById('tindak_lanjut').value,
-                    timestamp: new Date().toISOString()
-                };
-                
-                // Validasi data
-                if (!formData.nama || !formData.tanggal || !formData.mata_pelajaran || 
-                    !formData.kelas || !formData.topik || !formData.aktivitas) {
-                    throw new Error('Harap isi semua bidang yang wajib diisi');
-                }
-                
-                // Dapatkan data yang ada
-                const existingData = getJournalData();
-                
-                // Tambahkan data baru
-                existingData.push(formData);
-                
-                // Simpan ke localStorage
-                saveJournalData(existingData);
-                
-                // Tampilkan pesan sukses
-                successMessage.style.display = 'block';
-                infoMessage.style.display = 'none';
-                debugStatus.textContent = 'Data berhasil disimpan!';
-                
-                // Reset form setelah 2 detik
-                setTimeout(() => {
-                    form.reset();
-                    document.getElementById('tanggal').valueAsDate = new Date();
-                    successMessage.style.display = 'none';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error!', error);
-                errorMessage.textContent = `Error: ${error.message}`;
-                errorMessage.style.display = 'block';
-                debugStatus.textContent = error.message;
-            } finally {
-                btn.textContent = originalBtnText;
-                btn.disabled = false;
-                infoMessage.style.display = 'none';
-            }
-        });
-        
-        // Fungsi untuk memuat data ke tabel
-        function loadData(searchTerm = '') {
-            const journalData = getJournalData();
-            currentData = journalData;
-            
-            // Filter data jika ada pencarian
-            if (searchTerm) {
-                const term = searchTerm.toLowerCase();
-                currentData = journalData.filter(entry => 
-                    entry.nama.toLowerCase().includes(term) ||
-                    entry.mata_pelajaran.toLowerCase().includes(term) ||
-                    entry.kelas.toLowerCase().includes(term) ||
-                    entry.topik.toLowerCase().includes(term)
-                );
-            }
-            
-            // Update jumlah entri
-            entryCount.textContent = `${currentData.length} jurnal ditemukan`;
-            
-            // Pagination
-            const totalPages = Math.ceil(currentData.length / ITEMS_PER_PAGE);
-            renderPagination(totalPages);
-            
-            // Render data untuk halaman saat ini
-            renderTableData();
-            updateStorageInfo();
-        }
-        
-        // Fungsi untuk merender data tabel
-        function renderTableData() {
-            dataBody.innerHTML = '';
-            
-            if (currentData.length === 0) {
-                dataBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Tidak ada data jurnal</td></tr>';
+            if (!validateForm(formData)) {
                 return;
             }
             
-            // Hitung indeks untuk halaman saat ini
-            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, currentData.length);
-            
-            for (let i = startIndex; i < endIndex; i++) {
-                const entry = currentData[i];
-                const row = document.createElement('tr');
-                
-                // Format tanggal menjadi DD/MM/YYYY
-                const date = new Date(entry.tanggal);
-                const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-                
-                row.innerHTML = `
-                    <td>${formattedDate}</td>
-                    <td>${entry.nama}</td>
-                    <td>${entry.mata_pelajaran}</td>
-                    <td>${entry.kelas}</td>
-                    <td>${entry.topik}</td>
-                    <td class="action-buttons">
-                        <button class="btn action-btn view-btn" data-id="${entry.id}">Lihat</button>
-                        <button class="btn btn-danger action-btn delete-btn" data-id="${entry.id}">Hapus</button>
-                    </td>
-                `;
-                
-                dataBody.appendChild(row);
-            }
-            
-            // Tambahkan event listener untuk tombol
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', () => viewEntry(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => deleteEntry(btn.dataset.id));
-            });
-        }
-        
-        // Fungsi untuk merender pagination
-        function renderPagination(totalPages) {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-            
-            if (totalPages <= 1) return;
-            
-            // Tombol sebelumnya
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.textContent = '«';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTableData();
-                }
-            });
-            pagination.appendChild(prevBtn);
-            
-            // Tombol nomor halaman
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                pageBtn.textContent = i;
-                pageBtn.addEventListener('click', () => {
-                    currentPage = i;
-                    renderTableData();
-                });
-                pagination.appendChild(pageBtn);
-            }
-            
-            // Tombol selanjutnya
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.textContent = '»';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.addEventListener('click', () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTableData();
-                }
-            });
-            pagination.appendChild(nextBtn);
-        }
-        
-        // Fungsi untuk melihat detail entri
-        function viewEntry(id) {
-            const journalData = getJournalData();
-            const entry = journalData.find(item => item.id == id);
-            
-            if (!entry) {
-                alert('Entri tidak ditemukan!');
-                return;
-            }
-            
-            // Format tanggal menjadi DD/MM/YYYY
-            const date = new Date(entry.tanggal);
-            const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-            
-            // Tampilkan detail dalam alert (bisa diganti dengan modal yang lebih baik)
-            alert(`
-                Detail Jurnal Pembelajaran
-                ============================
-                Tanggal: ${formattedDate}
-                Nama Guru: ${entry.nama}
-                Mata Pelajaran: ${entry.mata_pelajaran}
-                Kelas: ${entry.kelas}
-                Topik: ${entry.topik}
-                
-                Aktivitas Pembelajaran:
-                ${entry.aktivitas}
-                
-                Materi Pembelajaran:
-                ${entry.materi || '-'}
-                
-                Kehadiran:
-                Hadir: ${entry.kehadiran}, Tidak Hadir: ${entry.tidak_hadir}
-                
-                Kendala:
-                ${entry.kendala || '-'}
-                
-                Rencana Tindak Lanjut:
-                ${entry.tindak_lanjut || '-'}
-            `);
-        }
-        
-        // Fungsi untuk menghapus entri
-        function deleteEntry(id) {
-            if (!confirm('Apakah Anda yakin ingin menghapus entri ini?')) return;
-            
-            const journalData = getJournalData();
-            const updatedData = journalData.filter(item => item.id != id);
-            
-            saveJournalData(updatedData);
-            loadData(); // Refresh data view
-        }
-        
-        // Event listener untuk pencarian
-        searchBtn.addEventListener('click', () => {
-            currentPage = 1;
-            loadData(searchInput.value);
-        });
-        
-        clearSearchBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            currentPage = 1;
-            loadData();
-        });
-        
-        // Event listener untuk ekspor data
-        exportBtn.addEventListener('click', () => {
-            const journalData = getJournalData();
-            const dataStr = JSON.stringify(journalData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `jurnal-guru-${new Date().toISOString().slice(0,10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        });
-        
-        // Event listener untuk impor data
-        importBtn.addEventListener('click', () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            
-            input.onchange = e => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = event => {
-                    try {
-                        const importedData = JSON.parse(event.target.result);
-                        
-                        if (!Array.isArray(importedData)) {
-                            throw new Error('Format file tidak valid');
-                        }
-                        
-                        // Gabungkan dengan data yang ada (mengganti entri dengan ID yang sama)
-                        const existingData = getJournalData();
-                        const combinedData = [...existingData];
-                        
-                        importedData.forEach(newEntry => {
-                            const existingIndex = existingData.findIndex(e => e.id === newEntry.id);
-                            if (existingIndex !== -1) {
-                                combinedData[existingIndex] = newEntry;
-                            } else {
-                                combinedData.push(newEntry);
-                            }
-                        });
-                        
-                        saveJournalData(combinedData);
-                        loadData();
-                        alert(`Data berhasil diimpor! ${importedData.length} entri diproses.`);
-                    } catch (error) {
-                        alert(`Error mengimpor data: ${error.message}`);
-                    }
-                };
-                
-                reader.readAsText(file);
+            const entryData = {
+                studentName: formData.get('studentName').trim(),
+                juz: formData.get('juz'),
+                startPage: parseInt(formData.get('startPage')),
+                endPage: parseInt(formData.get('endPage')),
+                notes: formData.get('notes').trim()
             };
-            
-            input.click();
+
+            addEntry(entryData);
         });
-        
-        // Event listener untuk menghapus semua data
-        clearBtn.addEventListener('click', () => {
-            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data jurnal?')) {
-                localStorage.removeItem('journalData');
-                loadData();
-                alert('Semua data jurnal telah dihapus.');
+
+        showDataBtn.addEventListener('click', filterByStudent);
+
+        closeModal.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        logoutBtn.addEventListener('click', logout);
+
+        // Tutup modal jika klik di luar
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
             }
         });
-        
-        // Inisialisasi penyimpanan info saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStorageInfo();
-        });
+
+        // Load initial data
+        loadEntries();
     </script>
 </body>
 </html>
