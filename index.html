@@ -394,13 +394,23 @@
                 gap: 10px;
             }
         }
+        
+        .firebase-info {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #4682B4;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🕌 Sistem Pencatatan Ngaji Santri</h1>
-            <p class="subtitle">Pencatatan Setoran Al-Qur'an Santri</p>
+            <p class="subtitle">Pencatatan Setoran Al-Qur'an Santri dengan Firebase</p>
             <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
         </header>
 
@@ -469,6 +479,10 @@
 
                     <button type="submit" class="btn">📝 Simpan Setoran</button>
                 </form>
+                
+                <div class="firebase-info">
+                    🔥 Data tersimpan di Firebase Firestore
+                </div>
             </div>
 
             <div class="entries-section">
@@ -488,7 +502,7 @@
                 
                 <h2>Data Setoran</h2>
                 <div class="student-list" id="entriesList">
-                    <div class="loading">Silakan login untuk melihat data.</div>
+                    <div class="loading">Memuat data dari Firebase...</div>
                 </div>
             </div>
         </div>
@@ -512,55 +526,26 @@
         </div>
     </div>
 
+    <!-- Tambahkan Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    
     <script>
-        // Simulasi data untuk demo
-        const demoData = [
-            {
-                id: "1",
-                studentName: "Ahmad Fauzi",
-                juz: "1",
-                startPage: 1,
-                endPage: 5,
-                notes: "Bacaan sudah bagus, perlu perbaikan tajwid pada halaman 3",
-                timestamp: new Date(Date.now() - 86400000 * 2) // 2 hari lalu
-            },
-            {
-                id: "2",
-                studentName: "Siti Rahayu",
-                juz: "2",
-                startPage: 12,
-                endPage: 15,
-                notes: "Hafalan lancar, perlu menambah kecepatan",
-                timestamp: new Date(Date.now() - 86400000) // 1 hari lalu
-            },
-            {
-                id: "3",
-                studentName: "Budi Santoso",
-                juz: "3",
-                startPage: 20,
-                endPage: 25,
-                notes: "Masih ada kesalahan pada halaman 22 dan 24",
-                timestamp: new Date()
-            },
-            {
-                id: "4",
-                studentName: "Ahmad Fauzi",
-                juz: "1",
-                startPage: 6,
-                endPage: 10,
-                notes: "Perbaikan tajwid sudah lebih baik",
-                timestamp: new Date(Date.now() - 86400000 * 4) // 4 hari lalu
-            },
-            {
-                id: "5",
-                studentName: "Dewi Anggraini",
-                juz: "5",
-                startPage: 30,
-                endPage: 35,
-                notes: "Bacaan sangat lancar dan tajwid baik",
-                timestamp: new Date(Date.now() - 86400000 * 3) // 3 hari lalu
-            }
-        ];
+        // Konfigurasi Firebase Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyAL7sRxl4MdHHuqVIC5kxu3CNVhdkhns-g",
+            authDomain: "jurnal-guru-cloud.firebaseapp.com",
+            projectId: "jurnal-guru-cloud",
+            storageBucket: "jurnal-guru-cloud.appspot.com",
+            messagingSenderId: "719638088062",
+            appId: "1:719638088062:web:b2dfe553fa245700b8cb2f"
+        };
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
         // DOM elements
         const form = document.getElementById('ngajiForm');
@@ -661,35 +646,49 @@
             });
         }
 
-        // Add ngaji entry
+        // Add ngaji entry to Firestore
         function addEntry(entryData) {
-            // Simulasi penyimpanan data
-            const newEntry = {
-                id: Date.now().toString(),
+            // Tambahkan ke Firestore
+            db.collection("ngajiEntries").add({
                 ...entryData,
-                timestamp: new Date()
-            };
-            
-            allEntries.unshift(newEntry);
-            showMessage('Setoran berhasil disimpan!', 'success');
-            form.reset();
-            
-            // Update UI jika sudah login
-            if (isAdminLoggedIn) {
-                displayEntries(allEntries);
-                updateStudentFilter();
-            }
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                showMessage('Setoran berhasil disimpan di Firebase!', 'success');
+                form.reset();
+                loadEntries(); // Muat ulang data
+            })
+            .catch(error => {
+                showMessage(`Gagal menyimpan: ${error.message}`, 'error');
+            });
         }
 
-        // Load entries
+        // Load entries from Firestore
         function loadEntries() {
-            // Untuk demo, gunakan data yang sudah ada
-            allEntries = [...demoData];
-            updateStudentFilter();
+            entriesList.innerHTML = '<div class="loading">Memuat data dari Firebase...</div>';
             
-            if (isAdminLoggedIn) {
-                displayEntries(allEntries);
-            }
+            db.collection("ngajiEntries")
+                .orderBy("timestamp", "desc")
+                .get()
+                .then(querySnapshot => {
+                    allEntries = [];
+                    querySnapshot.forEach(doc => {
+                        const data = doc.data();
+                        allEntries.push({
+                            id: doc.id,
+                            ...data,
+                            // Konversi Firestore timestamp ke JavaScript Date
+                            timestamp: data.timestamp ? data.timestamp.toDate() : new Date()
+                        });
+                    });
+                    
+                    updateStudentFilter();
+                    displayEntries(allEntries);
+                })
+                .catch(error => {
+                    showMessage(`Gagal memuat data: ${error.message}`, 'error');
+                    entriesList.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                });
         }
 
         // Display entries
@@ -767,13 +766,17 @@
             displayEntries(allEntries);
         }
 
-        // Delete entry
+        // Delete entry from Firestore
         function deleteEntry(id) {
             if (confirm('Apakah Anda yakin ingin menghapus data setoran ini?')) {
-                allEntries = allEntries.filter(entry => entry.id !== id);
-                showMessage('Data setoran berhasil dihapus!', 'success');
-                displayEntries(allEntries);
-                updateStudentFilter();
+                db.collection("ngajiEntries").doc(id).delete()
+                .then(() => {
+                    showMessage('Data setoran berhasil dihapus dari Firebase!', 'success');
+                    loadEntries(); // Muat ulang data
+                })
+                .catch(error => {
+                    showMessage(`Gagal menghapus: ${error.message}`, 'error');
+                });
             }
         }
 
@@ -795,32 +798,32 @@
             return true;
         }
 
-        // Login function
+        // Login function with Firebase Authentication
         function login() {
-            const username = usernameInput.value;
+            const email = usernameInput.value;
             const password = passwordInput.value;
 
-            // Validasi login
-            if (username === 'admin' && password === 'admin123') {
-                isAdminLoggedIn = true;
-                loginModal.style.display = 'none';
-                loginMessage.innerHTML = '';
-                logoutBtn.style.display = 'block';
-                
-                // Tampilkan data setelah login
-                loadEntries();
-                filterByStudent();
-            } else {
-                loginMessage.innerHTML = '<div class="error">Username atau password salah!</div>';
-            }
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    isAdminLoggedIn = true;
+                    loginModal.style.display = 'none';
+                    loginMessage.innerHTML = '';
+                    logoutBtn.style.display = 'block';
+                    loadEntries();
+                })
+                .catch(error => {
+                    loginMessage.innerHTML = `<div class="error">${error.message}</div>`;
+                });
         }
 
         // Logout function
         function logout() {
-            isAdminLoggedIn = false;
-            logoutBtn.style.display = 'none';
-            entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
-            progressSummary.innerHTML = '';
+            auth.signOut().then(() => {
+                isAdminLoggedIn = false;
+                logoutBtn.style.display = 'none';
+                entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
+                progressSummary.innerHTML = '';
+            });
         }
 
         // Event Listeners
@@ -856,6 +859,20 @@
         window.addEventListener('click', (e) => {
             if (e.target === loginModal) {
                 loginModal.style.display = 'none';
+            }
+        });
+
+        // Cek status login saat halaman dimuat
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                isAdminLoggedIn = true;
+                logoutBtn.style.display = 'block';
+                loadEntries();
+            } else {
+                isAdminLoggedIn = false;
+                logoutBtn.style.display = 'none';
+                entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
+                progressSummary.innerHTML = '';
             }
         });
 
