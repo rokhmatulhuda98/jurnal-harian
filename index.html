@@ -404,6 +404,14 @@
             font-size: 0.9em;
             color: #4682B4;
         }
+        /* Tambahkan di akhir CSS */
+        .admin-only {
+            display: block;
+        }
+        
+        .non-admin {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -768,6 +776,10 @@
 
         // Delete entry from Firestore
         function deleteEntry(id) {
+            if (!isAdminLoggedIn) {
+                showMessage('Hanya admin yang dapat menghapus data!', 'error');
+                return;
+            }
             if (confirm('Apakah Anda yakin ingin menghapus data setoran ini?')) {
                 db.collection("ngajiEntries").doc(id).delete()
                 .then(() => {
@@ -802,20 +814,30 @@
         function login() {
             const email = usernameInput.value;
             const password = passwordInput.value;
-
+        
             auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    isAdminLoggedIn = true;
-                    loginModal.style.display = 'none';
-                    loginMessage.innerHTML = '';
-                    logoutBtn.style.display = 'block';
-                    loadEntries();
+                .then((userCredential) => {
+                    // Cek apakah user adalah admin
+                    return userCredential.user.getIdTokenResult();
+                })
+                .then((idTokenResult) => {
+                    if (!!idTokenResult.claims.admin) {
+                        isAdminLoggedIn = true;
+                        loginModal.style.display = 'none';
+                        loginMessage.innerHTML = '';
+                        logoutBtn.style.display = 'block';
+                        loadEntries();
+                    } else {
+                        auth.signOut();
+                        loginMessage.innerHTML = `<div class="error">Hanya admin yang diizinkan!</div>`;
+                    }
                 })
                 .catch(error => {
                     loginMessage.innerHTML = `<div class="error">${error.message}</div>`;
                 });
         }
-
+        
+        
         // Logout function
         function logout() {
             auth.signOut().then(() => {
@@ -829,6 +851,11 @@
         // Event Listeners
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            if (!isAdminLoggedIn) {
+                showMessage('Hanya admin yang dapat menambah data!', 'error');
+                return;
+            }
             
             const formData = new FormData(form);
             
@@ -863,18 +890,37 @@
         });
 
         // Cek status login saat halaman dimuat
-        auth.onAuthStateChanged(user => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
-                isAdminLoggedIn = true;
-                logoutBtn.style.display = 'block';
-                loadEntries();
+                // Cek custom claims untuk admin
+                const idTokenResult = await user.getIdTokenResult();
+                isAdminLoggedIn = !!idTokenResult.claims.admin;
+                
+                if (isAdminLoggedIn) {
+                    logoutBtn.style.display = 'block';
+                    loadEntries();
+                } else {
+                    // Logout jika bukan admin
+                    auth.signOut();
+                    entriesList.innerHTML = '<div class="loading">Akses ditolak. Hanya admin yang diizinkan.</div>';
+                }
+                document.getElementById('form-section').style.display = isAdminLoggedIn ? 'block' : 'none';
             } else {
                 isAdminLoggedIn = false;
                 logoutBtn.style.display = 'none';
                 entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
                 progressSummary.innerHTML = '';
+                document.getElementById('form-section').style.display = 'none';
             }
         });
+        // Setelah login berhasil
+        auth.currentUser.getIdTokenResult(true)
+          .then((idTokenResult) => {
+            // Force token refresh
+          })
+          .catch((error) => {
+            console.error('Error refreshing token:', error);
+          });
 
         // Load initial data
         loadEntries();
