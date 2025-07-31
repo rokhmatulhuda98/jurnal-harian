@@ -67,7 +67,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 10;
+            z-index: 100;
             display: flex;
             gap: 10px;
         }
@@ -680,7 +680,7 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" required placeholder="Masukkan password">
             </div>
-            <button class="login-btn" onclick="login()">Login</button>
+            <button class="login-btn">Login</button>
         </div>
     </div>
 
@@ -1181,12 +1181,13 @@
             loginModal.style.display = 'none';
         });
 
-        logoutBtn.addEventListener('click', logout);
-
-        // Tambahkan event listener untuk tombol login di header
-        loginBtn.addEventListener('click', () => {
+        document.getElementById('loginBtn').addEventListener('click', function() {
             loginModal.style.display = 'flex';
         });
+
+        document.querySelector('.login-btn').addEventListener('click', login);
+
+        logoutBtn.addEventListener('click', logout);
 
         // Tutup modal jika klik di luar
         window.addEventListener('click', (e) => {
