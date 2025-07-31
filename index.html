@@ -498,11 +498,58 @@
                 overflow-x: auto;
                 font-size: 14px;
             }
+
+            .student-table {
+                font-size: 12px;
+            }
             
             .student-table th, 
             .student-table td {
-                padding: 8px 10px;
-                font-size: 13px;
+                padding: 6px 8px;
+                font-size: 12px;
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            
+            .student-table th:nth-child(1),
+            .student-table td:nth-child(1) {
+                max-width: 80px; /* Lebar kolom tanggal */
+            }
+            
+            .student-table th:nth-child(2),
+            .student-table td:nth-child(2) {
+                max-width: 40px; /* Lebar kolom juz */
+            }
+
+            
+            .student-table th:nth-child(3),
+            .student-table td:nth-child(3),
+            .student-table th:nth-child(4),
+            .student-table td:nth-child(4) {
+                max-width: 40px; /* Lebar kolom halaman */
+            }
+            
+            .student-table th:nth-child(5),
+            .student-table td:nth-child(5) {
+                max-width: 40px; /* Lebar kolom jumlah */
+            }
+            
+            .student-table th:nth-child(6),
+            .student-table td:nth-child(6) {
+                display: none; /* Sembunyikan catatan di mobile */
+            }
+            
+            .student-table th:nth-child(7),
+            .student-table td:nth-child(7) {
+                max-width: 50px; /* Lebar kolom aksi */
+            }
+            
+            .delete-btn {
+                padding: 5px 8px;
+                font-size: 11px;
             }
             
             /* Perbaikan modal login */
@@ -936,6 +983,9 @@
             const selectedStudent = filterStudent.value;
             const studentEntries = entries.filter(entry => entry.studentName === selectedStudent);
             
+            // Periksa apakah perangkat mobile
+            const isMobile = window.innerWidth <= 768;
+
             let tableHTML = `
                 <div class="table-container">
                     <table class="student-table">
@@ -943,10 +993,10 @@
                             <tr>
                                 <th>Tanggal</th>
                                 <th>Juz</th>
-                                <th>Halaman Awal</th>
-                                <th>Halaman Akhir</th>
-                                <th>Jumlah Halaman</th>
-                                <th>Catatan</th>
+                                <th>Hlm Awal</th>
+                                <th>Hlm Akhir</th>
+                                <th>Jml</th>
+                                ${!isMobile ? '<th>Catatan</th>' : ''}
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -962,7 +1012,7 @@
                         <td>${entry.startPage}</td>
                         <td>${entry.endPage}</td>
                         <td>${pageCount}</td>
-                        <td>${entry.notes || '-'}</td>
+                        ${!isMobile ? `<td>${entry.notes || '-'}</td>` : ''}
                         <td><button class="delete-btn" onclick="deleteEntry('${entry.id}')">Hapus</button></td>
                     </tr>
                 `;
