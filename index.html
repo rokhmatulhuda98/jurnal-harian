@@ -396,18 +396,27 @@
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 20px;
+                padding: 15px; /* Padding lebih kecil di mobile */
             }
             
             .container {
                 margin: 10px;
+                border-radius: 15px; /* Radius lebih kecil di mobile */
             }
             
             header {
-                padding: 20px;
+                padding: 20px 15px; /* Padding lebih kecil */
+                text-align: center;
             }
             
             h1 {
-                font-size: 2em;
+                font-size: 1.8em; /* Ukuran font lebih kecil */
+                margin-top: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1em; /* Ukuran font lebih kecil */
+                margin-bottom: 15px;
             }
             
             .entry-header {
@@ -420,6 +429,73 @@
                 position: static;
                 margin-top: 15px;
                 justify-content: center;
+                width: 100%;
+            }
+            
+            .form-section, 
+            .entries-section,
+            .filter-section {
+                padding: 20px 15px; /* Padding lebih kecil */
+            }
+            
+            h2 {
+                font-size: 1.5em; /* Ukuran font lebih kecil */
+            }
+            
+            h3 {
+                font-size: 1.3em; /* Ukuran font lebih kecil */
+            }
+            
+            /* Perbaikan form di mobile */
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            input, textarea, select {
+                padding: 10px; /* Padding lebih kecil */
+                font-size: 14px; /* Ukuran font lebih kecil */
+            }
+            
+            .btn {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            /* Perbaikan tampilan kartu setoran */
+            .entry-card {
+                padding: 15px;
+            }
+            
+            .entry-name {
+                font-size: 1em;
+                padding: 6px 12px;
+            }
+            
+            .entry-datetime {
+                font-size: 0.85em;
+            }
+            
+            /* Penyesuaian tombol filter */
+            .filter-section .btn {
+                margin-top: 8px;
+            }
+            
+            /* Penyesuaian tabel di mobile */
+            .table-container {
+                overflow-x: auto;
+                font-size: 14px;
+            }
+            
+            .student-table th, 
+            .student-table td {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            
+            /* Perbaikan modal login */
+            .modal-content {
+                width: 95%;
+                padding: 20px;
             }
         }
         
@@ -1073,6 +1149,31 @@
             };
 
             addEntry(entryData);
+
+            // Sembunyikan keyboard di mobile
+                document.activeElement.blur();
+            });
+            
+            // Tambahkan event listener untuk tombol filter di mobile
+            showDataBtn.addEventListener('click', () => {
+                filterByStudent();
+                // Scroll ke hasil pencarian
+                document.getElementById('entriesList').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Tambahkan fitur "pull to refresh"
+            let touchstartY = 0;
+            document.addEventListener('touchstart', e => {
+                touchstartY = e.touches[0].clientY;
+            });
+            
+            document.addEventListener('touchend', e => {
+                const touchendY = e.changedTouches[0].clientY;
+                if (touchendY - touchstartY > 100 && window.scrollY === 0) {
+                    loadEntries();
+                    showMessage('Data diperbarui', 'success');
+                }
+            });
         });
 
         showDataBtn.addEventListener('click', filterByStudent);
