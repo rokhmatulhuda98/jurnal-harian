@@ -1151,29 +1151,28 @@
             addEntry(entryData);
 
             // Sembunyikan keyboard di mobile
-                document.activeElement.blur();
-            });
+            document.activeElement.blur();
+        });
             
-            // Tambahkan event listener untuk tombol filter di mobile
-            showDataBtn.addEventListener('click', () => {
-                filterByStudent();
-                // Scroll ke hasil pencarian
-                document.getElementById('entriesList').scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            // Tambahkan fitur "pull to refresh"
-            let touchstartY = 0;
-            document.addEventListener('touchstart', e => {
-                touchstartY = e.touches[0].clientY;
-            });
-            
-            document.addEventListener('touchend', e => {
-                const touchendY = e.changedTouches[0].clientY;
-                if (touchendY - touchstartY > 100 && window.scrollY === 0) {
-                    loadEntries();
-                    showMessage('Data diperbarui', 'success');
-                }
-            });
+        // Tambahkan event listener untuk tombol filter di mobile
+        showDataBtn.addEventListener('click', () => {
+            filterByStudent();
+            // Scroll ke hasil pencarian
+            document.getElementById('entriesList').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Tambahkan fitur "pull to refresh"
+        let touchstartY = 0;
+        document.addEventListener('touchstart', e => {
+            touchstartY = e.touches[0].clientY;
+        });
+        
+        document.addEventListener('touchend', e => {
+            const touchendY = e.changedTouches[0].clientY;
+            if (touchendY - touchstartY > 100 && window.scrollY === 0) {
+                loadEntries();
+                showMessage('Data diperbarui', 'success');
+            }
         });
 
         showDataBtn.addEventListener('click', filterByStudent);
