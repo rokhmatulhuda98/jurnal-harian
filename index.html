@@ -412,7 +412,57 @@
         .non-admin {
             display: none;
         }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .student-table th {
+            background: linear-gradient(135deg, #2E8B57 0%, #32CD32 100%);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        .student-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .student-table tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        
+        .student-table tr:hover {
+            background-color: #f0fff0;
+        }
+        
+        .print-btn {
+            background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+        
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -437,36 +487,36 @@
                         <label for="juz">Juz:</label>
                         <select id="juz" name="juz" required>
                             <option value="">Pilih Juz</option>
-                            <option value="1">Juz 1 (Al-Baqarah 1-141)</option>
-                            <option value="2">Juz 2 (Al-Baqarah 142-252)</option>
-                            <option value="3">Juz 3 (Al-Baqarah 253 - Ali Imran 92)</option>
-                            <option value="4">Juz 4 (Ali Imran 93 - An-Nisa 23)</option>
-                            <option value="5">Juz 5 (An-Nisa 24-147)</option>
-                            <option value="6">Juz 6 (An-Nisa 148 - Al-Maidah 81)</option>
-                            <option value="7">Juz 7 (Al-Maidah 82 - Al-An'am 110)</option>
-                            <option value="8">Juz 8 (Al-An'am 111 - Al-A'raf 87)</option>
-                            <option value="9">Juz 9 (Al-A'raf 88 - Al-Anfal 40)</option>
-                            <option value="10">Juz 10 (Al-Anfal 41 - At-Taubah 92)</option>
-                            <option value="11">Juz 11 (At-Taubah 93 - Hud 5)</option>
-                            <option value="12">Juz 12 (Hud 6 - Yusuf 52)</option>
-                            <option value="13">Juz 13 (Yusuf 53 - Ibrahim 52)</option>
-                            <option value="14">Juz 14 (Al-Hijr 1 - An-Nahl 128)</option>
-                            <option value="15">Juz 15 (Al-Isra 1 - Al-Kahf 74)</option>
-                            <option value="16">Juz 16 (Al-Kahf 75 - Taha 135)</option>
-                            <option value="17">Juz 17 (Al-Anbiya 1 - Al-Hajj 78)</option>
-                            <option value="18">Juz 18 (Al-Mu'minun 1 - Al-Furqan 20)</option>
-                            <option value="19">Juz 19 (Al-Furqan 21 - An-Naml 55)</option>
-                            <option value="20">Juz 20 (An-Naml 56 - Al-Ankabut 45)</option>
-                            <option value="21">Juz 21 (Al-Ankabut 46 - Al-Ahzab 30)</option>
-                            <option value="22">Juz 22 (Al-Ahzab 31 - Yasin 27)</option>
-                            <option value="23">Juz 23 (Yasin 28 - Az-Zumar 31)</option>
-                            <option value="24">Juz 24 (Az-Zumar 32 - Fussilat 46)</option>
-                            <option value="25">Juz 25 (Fussilat 47 - Al-Jathiyah 37)</option>
-                            <option value="26">Juz 26 (Al-Ahqaf 1 - Az-Zariyat 30)</option>
-                            <option value="27">Juz 27 (Az-Zariyat 31 - Al-Hadid 29)</option>
-                            <option value="28">Juz 28 (Al-Mujadila 1 - At-Tahrim 12)</option>
-                            <option value="29">Juz 29 (Al-Mulk 1 - Al-Mursalat 50)</option>
-                            <option value="30">Juz 30 (An-Naba 1 - An-Nas 6)</option>
+                            <option value="1">Juz 1</option>
+                            <option value="2">Juz 2</option>
+                            <option value="3">Juz 3</option>
+                            <option value="4">Juz 4</option>
+                            <option value="5">Juz 5</option>
+                            <option value="6">Juz 6</option>
+                            <option value="7">Juz 7</option>
+                            <option value="8">Juz 8</option>
+                            <option value="9">Juz 9</option>
+                            <option value="10">Juz 10</option>
+                            <option value="11">Juz 11</option>
+                            <option value="12">Juz 12</option>
+                            <option value="13">Juz 13</option>
+                            <option value="14">Juz 14</option>
+                            <option value="15">Juz 15</option>
+                            <option value="16">Juz 16</option>
+                            <option value="17">Juz 17</option>
+                            <option value="18">Juz 18</option>
+                            <option value="19">Juz 19</option>
+                            <option value="20">Juz 20</option>
+                            <option value="21">Juz 21</option>
+                            <option value="22">Juz 22</option>
+                            <option value="23">Juz 23</option>
+                            <option value="24">Juz 24</option>
+                            <option value="25">Juz 25</option>
+                            <option value="26">Juz 26</option>
+                            <option value="27">Juz 27</option>
+                            <option value="28">Juz 28</option>
+                            <option value="29">Juz 29</option>
+                            <option value="30">Juz 30</option>
                         </select>
                     </div>
 
@@ -487,10 +537,6 @@
 
                     <button type="submit" class="btn">📝 Simpan Setoran</button>
                 </form>
-                
-                <div class="firebase-info">
-                    🔥 Data tersimpan di Firebase Firestore
-                </div>
             </div>
 
             <div class="entries-section">
@@ -509,6 +555,9 @@
                 <div id="progressSummary"></div>
                 
                 <h2>Data Setoran</h2>
+                <div id="printButtonContainer" style="display: none; text-align: center;">
+                    <button class="print-btn" onclick="printToPDF()">🖨️ Cetak PDF</button>
+                </div>
                 <div class="student-list" id="entriesList">
                     <div class="loading">Memuat data dari Firebase...</div>
                 </div>
@@ -595,36 +644,36 @@
         // Get Juz name
         function getJuzName(juzNumber) {
             const juzNames = {
-                '1': 'Juz 1 (Al-Baqarah 1-141)',
-                '2': 'Juz 2 (Al-Baqarah 142-252)',
-                '3': 'Juz 3 (Al-Baqarah 253 - Ali Imran 92)',
-                '4': 'Juz 4 (Ali Imran 93 - An-Nisa 23)',
-                '5': 'Juz 5 (An-Nisa 24-147)',
-                '6': 'Juz 6 (An-Nisa 148 - Al-Maidah 81)',
-                '7': 'Juz 7 (Al-Maidah 82 - Al-An\'am 110)',
-                '8': 'Juz 8 (Al-An\'am 111 - Al-A\'raf 87)',
-                '9': 'Juz 9 (Al-A\'raf 88 - Al-Anfal 40)',
-                '10': 'Juz 10 (Al-Anfal 41 - At-Taubah 92)',
-                '11': 'Juz 11 (At-Taubah 93 - Hud 5)',
-                '12': 'Juz 12 (Hud 6 - Yusuf 52)',
-                '13': 'Juz 13 (Yusuf 53 - Ibrahim 52)',
-                '14': 'Juz 14 (Al-Hijr 1 - An-Nahl 128)',
-                '15': 'Juz 15 (Al-Isra 1 - Al-Kahf 74)',
-                '16': 'Juz 16 (Al-Kahf 75 - Taha 135)',
-                '17': 'Juz 17 (Al-Anbiya 1 - Al-Hajj 78)',
-                '18': 'Juz 18 (Al-Mu\'minun 1 - Al-Furqan 20)',
-                '19': 'Juz 19 (Al-Furqan 21 - An-Naml 55)',
-                '20': 'Juz 20 (An-Naml 56 - Al-Ankabut 45)',
-                '21': 'Juz 21 (Al-Ankabut 46 - Al-Ahzab 30)',
-                '22': 'Juz 22 (Al-Ahzab 31 - Yasin 27)',
-                '23': 'Juz 23 (Yasin 28 - Az-Zumar 31)',
-                '24': 'Juz 24 (Az-Zumar 32 - Fussilat 46)',
-                '25': 'Juz 25 (Fussilat 47 - Al-Jathiyah 37)',
-                '26': 'Juz 26 (Al-Ahqaf 1 - Az-Zariyat 30)',
-                '27': 'Juz 27 (Az-Zariyat 31 - Al-Hadid 29)',
-                '28': 'Juz 28 (Al-Mujadila 1 - At-Tahrim 12)',
-                '29': 'Juz 29 (Al-Mulk 1 - Al-Mursalat 50)',
-                '30': 'Juz 30 (An-Naba 1 - An-Nas 6)'
+                '1': 'Juz 1',
+                '2': 'Juz 2',
+                '3': 'Juz 3',
+                '4': 'Juz 4',
+                '5': 'Juz 5',
+                '6': 'Juz 6',
+                '7': 'Juz 7',
+                '8': 'Juz 8',
+                '9': 'Juz 9',
+                '10': 'Juz 10',
+                '11': 'Juz 11',
+                '12': 'Juz 12',
+                '13': 'Juz 13',
+                '14': 'Juz 14',
+                '15': 'Juz 15',
+                '16': 'Juz 16',
+                '17': 'Juz 17',
+                '18': 'Juz 18',
+                '19': 'Juz 19',
+                '20': 'Juz 20',
+                '21': 'Juz 21',
+                '22': 'Juz 22',
+                '23': 'Juz 23',
+                '24': 'Juz 24',
+                '25': 'Juz 25',
+                '26': 'Juz 26',
+                '27': 'Juz 27',
+                '28': 'Juz 28',
+                '29': 'Juz 29',
+                '30': 'Juz 30'
             };
             return juzNames[juzNumber] || `Juz ${juzNumber}`;
         }
@@ -701,15 +750,22 @@
 
         // Display entries
         function displayEntries(entries) {
-            if (entries.length === 0) {
-                entriesList.innerHTML = '<div class="loading">Belum ada data setoran.</div>';
-                progressSummary.innerHTML = '';
-                return;
+            const selectedStudent = filterStudent.value;
+            const printButtonContainer = document.getElementById('printButtonContainer');
+
+            if (selectedStudent && entries.length > 0) {
+                // Tampilkan data dalam bentuk tabel jika memfilter santri tertentu
+                displayEntriesAsTable(entries);
+                // Tampilkan tombol cetak PDF
+                printButtonContainer.style.display = 'block';
+            } else {
+                // Tampilkan data dalam bentuk kartu jika tidak memfilter
+                displayEntriesAsCards(entries);
+                // Sembunyikan tombol cetak PDF
+                printButtonContainer.style.display = 'none';
             }
 
-            // Show progress summary if filtering by student
-            const selectedStudent = filterStudent.value;
-            if (selectedStudent) {
+            if (selectedStudent && entries.length > 0) {
                 const studentEntries = entries.filter(entry => entry.studentName === selectedStudent);
                 const progress = calculateProgress(studentEntries);
                 
@@ -723,6 +779,14 @@
                 `;
             } else {
                 progressSummary.innerHTML = '';
+            }
+        }
+        
+        // Display entries as cards
+        function displayEntriesAsCards(entries) {
+            if (entries.length === 0) {
+                entriesList.innerHTML = '<div class="loading">Belum ada data setoran.</div>';
+                return;
             }
 
             let entriesHTML = '';
@@ -747,7 +811,115 @@
             entriesList.innerHTML = entriesHTML;
         }
 
-        // Filter by student
+        // Display entries as table
+        function displayEntriesAsTable(entries) {
+            if (entries.length === 0) {
+                entriesList.innerHTML = '<div class="loading">Belum ada data setoran untuk santri ini.</div>';
+                return;
+            }
+
+            const selectedStudent = filterStudent.value;
+            const studentEntries = entries.filter(entry => entry.studentName === selectedStudent);
+            
+            let tableHTML = `
+                <div class="table-container">
+                    <table class="student-table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Juz</th>
+                                <th>Halaman Awal</th>
+                                <th>Halaman Akhir</th>
+                                <th>Jumlah Halaman</th>
+                                <th>Catatan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            studentEntries.forEach((entry) => {
+                const pageCount = parseInt(entry.endPage) - parseInt(entry.startPage) + 1;
+                tableHTML += `
+                    <tr>
+                        <td>${entry.timestamp.toLocaleDateString('id-ID')}</td>
+                        <td>${getJuzName(entry.juz)}</td>
+                        <td>${entry.startPage}</td>
+                        <td>${entry.endPage}</td>
+                        <td>${pageCount}</td>
+                        <td>${entry.notes || '-'}</td>
+                        <td><button class="delete-btn" onclick="deleteEntry('${entry.id}')">Hapus</button></td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            entriesList.innerHTML = tableHTML;
+        }
+
+        // Print to PDF function
+        function printToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const selectedStudent = filterStudent.value;
+            const entries = allEntries.filter(entry => entry.studentName === selectedStudent);
+            
+            // Header PDF
+            doc.setFontSize(18);
+            doc.text(`Laporan Setoran Ngaji Santri`, 105, 15, null, null, 'center');
+            doc.setFontSize(14);
+            doc.text(`Nama: ${selectedStudent}`, 105, 25, null, null, 'center');
+            
+            // Data untuk tabel
+            const tableData = [];
+            entries.forEach(entry => {
+                const pageCount = parseInt(entry.endPage) - parseInt(entry.startPage) + 1;
+                tableData.push([
+                    entry.timestamp.toLocaleDateString('id-ID'),
+                    getJuzName(entry.juz),
+                    entry.startPage,
+                    entry.endPage,
+                    pageCount,
+                    entry.notes || '-'
+                ]);
+            });
+            
+            // Buat tabel PDF
+            doc.autoTable({
+                head: [['Tanggal', 'Juz', 'Halaman Awal', 'Halaman Akhir', 'Jumlah Halaman', 'Catatan']],
+                body: tableData,
+                startY: 30,
+                styles: { fontSize: 10 },
+                headStyles: { 
+                    fillColor: [46, 139, 87],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: { fillColor: [240, 255, 240] }
+            });
+            
+            // Hitung total progress
+            const progress = calculateProgress(entries);
+            const summaryY = doc.lastAutoTable.finalY + 10;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text('Ringkasan Progress:', 15, summaryY);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Total Halaman: ${progress.totalPages}`, 15, summaryY + 7);
+            doc.text(`Total Juz: ${progress.totalJuz}`, 15, summaryY + 14);
+            doc.text(`Total Setoran: ${progress.totalEntries}`, 15, summaryY + 21);
+            
+            // Simpan PDF
+            doc.save(`Setoran Ngaji - ${selectedStudent}.pdf`);
+        }
+        
+        // Filter by student (perlu disesuaikan)
         function filterByStudent() {
             if (!isAdminLoggedIn) {
                 loginModal.style.display = 'flex';
@@ -757,13 +929,13 @@
             const selectedStudent = filterStudent.value;
             if (selectedStudent) {
                 const filteredEntries = allEntries.filter(entry => entry.studentName === selectedStudent);
-                displayEntries(filteredEntries);
+                displayEntries(filteredEntries); // Akan memanggil tampilan tabel
             } else {
-                displayEntries(allEntries);
+                displayEntries(allEntries); // Akan memanggil tampilan kartu
             }
         }
-
-        // Clear filter
+        
+        // Clear filter (perlu disesuaikan)
         function clearFilter() {
             if (!isAdminLoggedIn) {
                 loginModal.style.display = 'flex';
@@ -771,9 +943,10 @@
             }
             
             filterStudent.value = '';
-            displayEntries(allEntries);
+            displayEntries(allEntries); // Kembali ke tampilan kartu
+            document.getElementById('printButtonContainer').style.display = 'none'; // Sembunyikan tombol cetak
         }
-
+        
         // Delete entry from Firestore
         function deleteEntry(id) {
             if (!isAdminLoggedIn) {
