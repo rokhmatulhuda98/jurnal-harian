@@ -62,6 +62,32 @@
             z-index: 1;
         }
 
+        /* Tambahkan style untuk tombol di header */
+        .header-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+
+        .login-top-btn {
+            background: linear-gradient(135deg, #2E8B57 0%, #32CD32 100%);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-top-btn:hover {
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+
         .main-content {
             padding: 40px;
             display: grid;
@@ -360,10 +386,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
         }
 
         .logout-btn:hover {
@@ -393,6 +415,12 @@
                 align-items: flex-start;
                 gap: 10px;
             }
+            
+            .header-buttons {
+                position: static;
+                margin-top: 15px;
+                justify-content: center;
+            }
         }
         
         .firebase-info {
@@ -403,14 +431,6 @@
             text-align: center;
             font-size: 0.9em;
             color: #4682B4;
-        }
-        /* Tambahkan di akhir CSS */
-        .admin-only {
-            display: block;
-        }
-        
-        .non-admin {
-            display: none;
         }
 
         .table-container {
@@ -469,7 +489,12 @@
         <header>
             <h1>🕌 Sistem Pencatatan Ngaji Santri</h1>
             <p class="subtitle">Pencatatan Setoran Al-Qur'an Santri dengan Firebase</p>
-            <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
+            
+            <!-- Tambahkan div untuk tombol login/logout di header -->
+            <div class="header-buttons">
+                <button id="loginBtn" class="login-top-btn">Login</button>
+                <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
+            </div>
         </header>
 
         <div class="main-content">
@@ -614,6 +639,7 @@
         const closeModal = document.getElementById('closeModal');
         const showDataBtn = document.getElementById('showDataBtn');
         const logoutBtn = document.getElementById('logoutBtn');
+        const loginBtn = document.getElementById('loginBtn'); // Tombol login baru
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const loginMessage = document.getElementById('loginMessage');
@@ -999,6 +1025,7 @@
                         loginModal.style.display = 'none';
                         loginMessage.innerHTML = '';
                         logoutBtn.style.display = 'block';
+                        loginBtn.style.display = 'none'; // Sembunyikan tombol login
                         loadEntries();
                     } else {
                         auth.signOut();
@@ -1016,6 +1043,7 @@
             auth.signOut().then(() => {
                 isAdminLoggedIn = false;
                 logoutBtn.style.display = 'none';
+                loginBtn.style.display = 'block'; // Tampilkan tombol login
                 entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
                 progressSummary.innerHTML = '';
             });
@@ -1055,6 +1083,11 @@
 
         logoutBtn.addEventListener('click', logout);
 
+        // Tambahkan event listener untuk tombol login di header
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+
         // Tutup modal jika klik di luar
         window.addEventListener('click', (e) => {
             if (e.target === loginModal) {
@@ -1071,29 +1104,21 @@
                 
                 if (isAdminLoggedIn) {
                     logoutBtn.style.display = 'block';
+                    loginBtn.style.display = 'none';
                     loadEntries();
                 } else {
                     // Logout jika bukan admin
                     auth.signOut();
                     entriesList.innerHTML = '<div class="loading">Akses ditolak. Hanya admin yang diizinkan.</div>';
                 }
-                document.getElementById('form-section').style.display = isAdminLoggedIn ? 'block' : 'none';
             } else {
                 isAdminLoggedIn = false;
                 logoutBtn.style.display = 'none';
+                loginBtn.style.display = 'block';
                 entriesList.innerHTML = '<div class="loading">Silakan login untuk melihat data.</div>';
                 progressSummary.innerHTML = '';
-                document.getElementById('form-section').style.display = 'none';
             }
         });
-        // Setelah login berhasil
-        auth.currentUser.getIdTokenResult(true)
-          .then((idTokenResult) => {
-            // Force token refresh
-          })
-          .catch((error) => {
-            console.error('Error refreshing token:', error);
-          });
 
         // Load initial data
         loadEntries();
