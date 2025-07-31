@@ -405,9 +405,9 @@
             }
             
             header {
-                padding: 20px 15px; /* Padding lebih kecil */
+                padding: 20px 15px 70px; /* Padding lebih kecil */
                 text-align: center;
-                padding-bottom: 25px;
+                position: relative;
             }
             
             h1 {
@@ -428,11 +428,14 @@
             
             .header-buttons {
                 position: absolute;
-                bottom: 15px;
+                bottom: 15px; /* Posisi dari bawah header */
                 left: 0;
                 right: 0;
+                display: flex;
                 justify-content: center;
+                gap: 10px;
                 z-index: 101;
+                margin-top: 0;
             }            
             .form-section, 
             .entries-section,
