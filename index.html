@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Komentar Pernikahan</title>
+    <title>Buku Tamu Pernikahan Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #ff6b6b;
@@ -16,6 +16,7 @@
             --success: #2ecc71;
             --danger: #e74c3c;
             --warning: #f39c12;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         
         * {
@@ -30,22 +31,27 @@
             min-height: 100vh;
             padding: 20px;
             color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .container {
             max-width: 1000px;
+            width: 100%;
             margin: 0 auto;
         }
         
         header {
             text-align: center;
-            padding: 30px 0;
+            padding: 30px 20px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            width: 100%;
         }
         
         header::before {
@@ -59,26 +65,47 @@
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .couple-names {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 10px 0;
         }
         
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #7f8c8d;
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .wedding-date {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 15px;
+            background: rgba(255, 107, 107, 0.1);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
         }
         
         .form-container {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-bottom: 40px;
+            width: 100%;
         }
         
         .form-title {
@@ -95,16 +122,12 @@
         
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
         
         .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group.full-width {
-            grid-column: span 2;
+            margin-bottom: 15px;
         }
         
         label {
@@ -119,7 +142,7 @@
         
         input, textarea, select {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border: 2px solid #e0e6ed;
             border-radius: 10px;
             font-size: 16px;
@@ -133,18 +156,19 @@
         }
         
         textarea {
-            min-height: 150px;
+            min-height: 120px;
             resize: vertical;
         }
         
         .btn-group {
             display: flex;
             gap: 15px;
-            margin-top: 10px;
+            margin-top: 15px;
+            flex-direction: column;
         }
         
         button {
-            padding: 14px 24px;
+            padding: 14px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -153,13 +177,14 @@
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            width: 100%;
         }
         
         .submit-btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             color: white;
-            flex: 1;
         }
         
         .submit-btn:hover {
@@ -179,17 +204,18 @@
         
         .comments-container {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-bottom: 40px;
+            width: 100%;
         }
         
         .comments-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #f1f2f6;
         }
@@ -204,7 +230,7 @@
         
         .no-comments {
             text-align: center;
-            padding: 40px 0;
+            padding: 30px 0;
             color: #7f8c8d;
         }
         
@@ -215,10 +241,10 @@
         }
         
         .comment {
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             background: #f9fbfd;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             position: relative;
             border-left: 4px solid var(--accent);
             transition: all 0.3s;
@@ -232,8 +258,10 @@
         .comment-header {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            gap: 10px;
         }
         
         .comment-author {
@@ -243,8 +271,8 @@
         }
         
         .avatar {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             display: flex;
@@ -252,18 +280,19 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
+            flex-shrink: 0;
         }
         
         .author-name {
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
         }
         
         .comment-status {
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
         }
         
@@ -279,15 +308,15 @@
         
         .comment-timestamp {
             color: #7f8c8d;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 13px;
+            margin-top: 3px;
         }
         
         .comment-text {
             line-height: 1.6;
             color: #34495e;
-            margin: 15px 0;
-            padding: 15px;
+            margin: 12px 0;
+            padding: 12px;
             background: white;
             border-radius: 8px;
             border: 1px solid #f1f2f6;
@@ -295,16 +324,17 @@
         
         .comment-actions {
             display: flex;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
         }
         
         .action-btn {
-            padding: 8px 15px;
+            padding: 7px 12px;
             background: #f1f2f6;
             border-radius: 8px;
             color: var(--dark);
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -317,8 +347,8 @@
         }
         
         .reply-form {
-            margin-top: 15px;
-            padding: 20px;
+            margin-top: 12px;
+            padding: 15px;
             background: #f1f8ff;
             border-radius: 10px;
             display: none;
@@ -330,10 +360,10 @@
         }
         
         .replies {
-            margin-left: 40px;
-            margin-top: 25px;
+            margin-left: 20px;
+            margin-top: 20px;
             border-left: 2px solid #e0e6ed;
-            padding-left: 25px;
+            padding-left: 15px;
         }
         
         .reply {
@@ -353,6 +383,7 @@
             z-index: 1000;
             display: none;
             animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+            max-width: 90%;
         }
         
         .notification.success {
@@ -370,8 +401,37 @@
             width: 30px;
             height: 30px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 20px auto;
             display: none;
+        }
+        
+        .share-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .share-btn {
+            background: var(--accent);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .share-btn:hover {
+            background: #4857e0;
+            transform: translateY(-2px);
         }
         
         @keyframes fadeIn {
@@ -393,17 +453,29 @@
             to { transform: rotate(360deg); }
         }
         
-        @media (max-width: 768px) {
+        @media (min-width: 768px) {
             .form-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
             
             .form-group.full-width {
-                grid-column: span 1;
+                grid-column: span 2;
             }
             
             .replies {
-                margin-left: 20px;
+                margin-left: 40px;
+            }
+            
+            .btn-group {
+                flex-direction: row;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .couple-names {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -411,7 +483,9 @@
 <body>
     <div class="container">
         <header>
-            <h1>Buku Tamu Pernikahan</h1>
+            <h1>Buku Tamu Pernikahan Digital</h1>
+            <div class="couple-names">Rina & Budi</div>
+            <div class="wedding-date">Sabtu, 12 Oktober 2024</div>
             <p class="subtitle">Berikan ucapan dan konfirmasi kehadiran Anda untuk hari bahagia kami</p>
         </header>
         
@@ -454,6 +528,13 @@
             </form>
         </div>
         
+        <div class="share-section">
+            <h3>Bagikan halaman ini ke tamu undangan lainnya</h3>
+            <div class="share-btn" id="share-btn">
+                <i class="fas fa-share-alt"></i> Bagikan Link
+            </div>
+        </div>
+        
         <div class="comments-container">
             <div class="comments-header">
                 <h2>Ucapan dari Tamu</h2>
@@ -474,7 +555,7 @@
     </div>
 
     <script>
-        // Inisialisasi Supabase
+        // Inisialisasi Supabase - GANTI DENGAN DETAIL ANDA
         const SUPABASE_URL = 'https://uptkhybrwikkbfaqypve.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwdGtoeWJyd2lra2JmYXF5cHZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNDQ5NTksImV4cCI6MjA2OTcyMDk1OX0.fTfMeSy03acVv49QuFOGQDL9P9AZeS19mp91tahsvkc';
         
@@ -487,6 +568,7 @@
             const notification = document.getElementById('notification');
             const loadingSpinner = document.getElementById('loading-spinner');
             const noComments = document.getElementById('no-comments');
+            const shareBtn = document.getElementById('share-btn');
             
             // Tampilkan spinner saat memuat data
             loadingSpinner.style.display = 'block';
@@ -537,6 +619,29 @@
                 } catch (error) {
                     console.error('Error:', error);
                     showNotification('error', 'Terjadi kesalahan: ' + error.message);
+                }
+            });
+            
+            // Fungsi untuk membagikan link
+            shareBtn.addEventListener('click', async function() {
+                try {
+                    const currentUrl = window.location.href;
+                    
+                    if (navigator.share) {
+                        // Jika browser mendukung Web Share API
+                        await navigator.share({
+                            title: 'Buku Tamu Pernikahan',
+                            text: 'Berikan ucapan untuk pernikahan kami',
+                            url: currentUrl
+                        });
+                    } else {
+                        // Fallback untuk browser yang tidak mendukung
+                        await navigator.clipboard.writeText(currentUrl);
+                        showNotification('success', 'Link berhasil disalin ke clipboard!');
+                    }
+                } catch (err) {
+                    console.error('Error sharing:', err);
+                    showNotification('error', 'Gagal membagikan link');
                 }
             });
             
@@ -655,8 +760,8 @@
                                 <textarea class="reply-text" required minlength="2" placeholder="Tulis balasan Anda..."></textarea>
                             </div>
                             <div class="btn-group">
-                                <button type="button" class="cancel-reply-btn">Batal</button>
-                                <button type="submit" class="submit-reply-btn">Kirim Balasan</button>
+                                <button type="button" class="cancel-reply-btn reset-btn">Batal</button>
+                                <button type="submit" class="submit-reply-btn submit-btn">Kirim Balasan</button>
                             </div>
                         </form>
                     </div>
