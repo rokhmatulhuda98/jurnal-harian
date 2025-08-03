@@ -559,10 +559,9 @@
         const SUPABASE_URL = 'https://uptkhybrwikkbfaqypve.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwdGtoeWJyd2lra2JmYXF5cHZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNDQ5NTksImV4cCI6MjA2OTcyMDk1OX0.fTfMeSy03acVv49QuFOGQDL9P9AZeS19mp91tahsvkc';
         
-        document.addEventListener('DOMContentLoaded', async function() {
-          const { createClient } = window.supabase;
-          const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-        });
+        const { createClient } = window.supabase;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        
         document.addEventListener('DOMContentLoaded', function() {
             const commentForm = document.getElementById('comment-form');
             const commentsList = document.getElementById('comments-list');
@@ -858,5 +857,6 @@
     </script>
 </body>
 </html>
+
 
 
