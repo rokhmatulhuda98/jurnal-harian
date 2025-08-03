@@ -140,7 +140,7 @@
             color: var(--danger);
         }
         
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e6ed;
@@ -149,7 +149,7 @@
             transition: all 0.3s;
         }
         
-        input:focus, textarea:focus, select:focus {
+        input:focus, textarea:focus {
             border-color: var(--accent);
             outline: none;
             box-shadow: 0 0 0 3px rgba(85, 99, 222, 0.2);
@@ -287,23 +287,6 @@
         .author-name {
             font-weight: 700;
             font-size: 16px;
-        }
-        
-        .comment-status {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-        
-        .status-attending {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        
-        .status-not-attending {
-            background: #ffebee;
-            color: #c62828;
         }
         
         .comment-timestamp {
@@ -455,11 +438,11 @@
         
         @media (min-width: 768px) {
             .form-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
             }
             
             .form-group.full-width {
-                grid-column: span 2;
+                grid-column: span 1;
             }
             
             .replies {
@@ -486,7 +469,7 @@
             <h1>Buku Tamu Pernikahan Digital</h1>
             <div class="couple-names">Rina & Budi</div>
             <div class="wedding-date">Sabtu, 12 Oktober 2024</div>
-            <p class="subtitle">Berikan ucapan dan konfirmasi kehadiran Anda untuk hari bahagia kami</p>
+            <p class="subtitle">Berikan ucapan untuk hari bahagia kami</p>
         </header>
         
         <div class="form-container">
@@ -503,15 +486,6 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="konfirmasi">Konfirmasi Kehadiran</label>
-                        <select id="konfirmasi" name="konfirmasi">
-                            <option value="" disabled selected>Pilih status kehadiran</option>
-                            <option value="Hadir">Hadir</option>
-                            <option value="Tidak hadir">Tidak Hadir</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group full-width">
                         <label for="comment">Ucapan <span class="required">*</span></label>
                         <textarea id="comment" name="comment" required minlength="2" placeholder="Tulis ucapan Anda..."></textarea>
                     </div>
@@ -555,7 +529,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Inisialisasi Supabase - GANTI DENGAN DETAIL ANDA
+        // Inisialisasi Supabase
         const SUPABASE_URL = 'https://uptkhybrwikkbfaqypve.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwdGtoeWJyd2lra2JmYXF5cHZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNDQ5NTksImV4cCI6MjA2OTcyMDk1OX0.fTfMeSy03acVv49QuFOGQDL9P9AZeS19mp91tahsvkc';
         
@@ -585,7 +559,6 @@
                 // Ambil nilai form
                 const name = document.getElementById('author').value.trim();
                 const message = document.getElementById('comment').value.trim();
-                const status = document.getElementById('konfirmasi').value || 'Belum dikonfirmasi';
                 
                 // Validasi input
                 if (!name || !message) {
@@ -600,8 +573,7 @@
                         .insert([
                             { 
                                 name: name, 
-                                message: message, 
-                                status: status,
+                                message: message,
                                 is_reply: false,
                                 parent_id: null
                             }
@@ -725,11 +697,6 @@
                     .substring(0, 2)
                     .toUpperCase();
                 
-                // Status kehadiran
-                const statusClass = comment.status === 'Hadir' ? 
-                    'status-attending' : 
-                    (comment.status === 'Tidak hadir' ? 'status-not-attending' : '');
-                
                 commentElement.innerHTML = `
                     <div class="comment-header">
                         <div class="comment-author">
@@ -739,7 +706,6 @@
                                 <div class="comment-timestamp">${formattedDate}</div>
                             </div>
                         </div>
-                        ${comment.status ? `<div class="comment-status ${statusClass}">${comment.status}</div>` : ''}
                     </div>
                     <div class="comment-text">${comment.message}</div>
                     <div class="comment-actions">
@@ -857,6 +823,3 @@
     </script>
 </body>
 </html>
-
-
-
