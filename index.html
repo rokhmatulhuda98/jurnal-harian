@@ -2,824 +2,132 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buku Tamu Pernikahan Digital</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --primary: #ff6b6b;
-            --secondary: #4ecdc4;
-            --accent: #5563de;
-            --light: #f8f9fa;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f9f7fe 0%, #e3f2fd 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .container {
-            max-width: 1000px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            padding: 30px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-        
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-        
-        .couple-names {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent);
-            margin: 10px 0;
-        }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-        
-        .wedding-date {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-top: 15px;
-            background: rgba(255, 107, 107, 0.1);
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 30px;
-        }
-        
-        .form-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 40px;
-            width: 100%;
-        }
-        
-        .form-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .form-title i {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        .required {
-            color: var(--danger);
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e6ed;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        input:focus, textarea:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(85, 99, 222, 0.2);
-        }
-        
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            flex-direction: column;
-        }
-        
-        button {
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-        }
-        
-        .submit-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-        }
-        
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #ff5252 0%, #4857e0 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .reset-btn {
-            background: #f1f2f6;
-            color: var(--dark);
-        }
-        
-        .reset-btn:hover {
-            background: #dfe4ea;
-        }
-        
-        .comments-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 40px;
-            width: 100%;
-        }
-        
-        .comments-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f1f2f6;
-        }
-        
-        .comments-count {
-            background: var(--accent);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        
-        .no-comments {
-            text-align: center;
-            padding: 30px 0;
-            color: #7f8c8d;
-        }
-        
-        .no-comments i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #bdc3c7;
-        }
-        
-        .comment {
-            padding: 20px;
-            border-radius: 12px;
-            background: #f9fbfd;
-            margin-bottom: 20px;
-            position: relative;
-            border-left: 4px solid var(--accent);
-            transition: all 0.3s;
-        }
-        
-        .comment:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 12px;
-            gap: 10px;
-        }
-        
-        .comment-author {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        
-        .author-name {
-            font-weight: 700;
-            font-size: 16px;
-        }
-        
-        .comment-timestamp {
-            color: #7f8c8d;
-            font-size: 13px;
-            margin-top: 3px;
-        }
-        
-        .comment-text {
-            line-height: 1.6;
-            color: #34495e;
-            margin: 12px 0;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #f1f2f6;
-        }
-        
-        .comment-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            padding: 7px 12px;
-            background: #f1f2f6;
-            border-radius: 8px;
-            color: var(--dark);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .action-btn:hover {
-            background: #dfe4ea;
-        }
-        
-        .reply-form {
-            margin-top: 12px;
-            padding: 15px;
-            background: #f1f8ff;
-            border-radius: 10px;
-            display: none;
-        }
-        
-        .reply-form.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .replies {
-            margin-left: 20px;
-            margin-top: 20px;
-            border-left: 2px solid #e0e6ed;
-            padding-left: 15px;
-        }
-        
-        .reply {
-            background: #f8f9fa;
-            border-left: 3px solid var(--secondary);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            display: none;
-            animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
-            max-width: 90%;
-        }
-        
-        .notification.success {
-            background: linear-gradient(135deg, var(--success) 0%, #27ae60 100%);
-        }
-        
-        .notification.error {
-            background: linear-gradient(135deg, var(--danger) 0%, #c0392b 100%);
-        }
-        
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--accent);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none;
-        }
-        
-        .share-section {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            width: 100%;
-            text-align: center;
-        }
-        
-        .share-btn {
-            background: var(--accent);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .share-btn:hover {
-            background: #4857e0;
-            transform: translateY(-2px);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        @media (min-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-            
-            .replies {
-                margin-left: 40px;
-            }
-            
-            .btn-group {
-                flex-direction: row;
-            }
-            
-            h1 {
-                font-size: 2.8rem;
-            }
-            
-            .couple-names {
-                font-size: 2.2rem;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Wedding of Huda and Qisthin - Kang Santri Digital Invitations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Buku Tamu Pernikahan Digital</h1>
-            <div class="couple-names">Rina & Budi</div>
-            <div class="wedding-date">Sabtu, 12 Oktober 2024</div>
-            <p class="subtitle">Berikan ucapan untuk hari bahagia kami</p>
-        </header>
-        
-        <div class="form-container">
-            <div class="form-title">
-                <i class="fas fa-pen"></i>
-                <h2>Kirim Ucapan</h2>
+    <div class="container-content">
+        <div class="content">
+            <div class="container-buka-undangan-button">
+                <a href="#undangan_dibuka" id="buka-undangan-button">
+                    <span class="wrapper-text-buka-undangan-button">Buka Undangan</span>
+                </a>
             </div>
-            
-            <form id="comment-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="author">Nama <span class="required">*</span></label>
-                        <input type="text" id="author" name="author" required placeholder="Masukkan nama Anda">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="comment">Ucapan <span class="required">*</span></label>
-                        <textarea id="comment" name="comment" required minlength="2" placeholder="Tulis ucapan Anda..."></textarea>
-                    </div>
-                </div>
-                
-                <div class="btn-group">
-                    <button type="reset" class="reset-btn">
-                        <i class="fas fa-redo"></i> Reset
-                    </button>
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> Kirim Ucapan
-                    </button>
-                </div>
-            </form>
-        </div>
-        
-        <div class="share-section">
-            <h3>Bagikan halaman ini ke tamu undangan lainnya</h3>
-            <div class="share-btn" id="share-btn">
-                <i class="fas fa-share-alt"></i> Bagikan Link
+            <div class="container-music-player">
+                <audio id="music" loop>
+                    <source src="/assets/music/maher-zain-harris-j-qalbi-fil-madinah.mp3" type="audio/mpeg">    
+                </audio>		
+                <button class="icon-button-music rotating-icon" id="play-pause-music">
+                    <img id="vinyl-icon" src="/assets/images/vinyl.png" alt="Music Icon">
+                </button>
             </div>
-        </div>
-        
-        <div class="comments-container">
-            <div class="comments-header">
-                <h2>Ucapan dari Tamu</h2>
-                <div class="comments-count" id="comments-count">0 Komentar</div>
-            </div>
-            
-            <div id="comments-list">
-                <div class="spinner" id="loading-spinner"></div>
-                <div class="no-comments" id="no-comments">
-                    <i class="far fa-comments"></i>
-                    <h3>Belum ada ucapan</h3>
-                    <p>Jadilah yang pertama memberikan ucapan</p>
+            <div id="undangan_dibuka">
+                <p>Dengan undangan ini kami mengharap kehadiran Bapak/Ibu/Saudara pada pernikahan kami</p>
+                <p>Rokhmatul Huda</p>
+                <a class="link_ig_pengantin_putra" href="https://www.instagram.com/philosolver_0/" target="_blank">
+                    <img id="ikon_ig_pengantin_putra" src="/assets/images/icon_IG.png" alt="IG Pengantin Wanita" style="width: 50px; height: 50px;">
+                </a>
+                <p>dan</p>
+                <p>Qisthin Halimah Istihsanah</p>
+                <a class="link_ig_pengantin_putri" href="https://www.instagram.com/qisthi_syarief/" target="_blank">
+                    <img id="ikon_ig_pengantin_putri" src="/assets/images/icon_IG.png" alt="IG Pengantin Wanita" style="width: 50px; height: 50px;">
+                </a>
+                <p>yang akan dilaksanakan pada hari</p>
+                <p>Senin, 26 Maret 2027</p>
+                <p>di Gedung Serbaguna, Jalan Raya No. 123, Jakarta</p>
+                <a class="link-tombol-lokasi" href="https://www.google.com/maps/dir//Batujajar+Bar.,+Kec.+Batujajar,+Kabupaten+Bandung+Barat,+Jawa+Barat+40561/@-6.9182235,107.4124403,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x2e68e54436f9287b:0x35604fef7c4c7346!2m2!1d107.4948422!2d-6.9182306?hl=in-ID&entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="nofollow">    
+                    <span class="wrapper-text-lokasi">LOKASI</span>    
+                </a>
+                <div class="google-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63375.07012847685!2d107.43590785315173!3d-6.897554783903577!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e4e1c1acecb9%3A0x75e17b3d243e2f1b!2sDanau%20Wakadobol!5e0!3m2!1sid!2sid!4v1754512554541!5m2!1sid!2sid" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
+                <p>UNTUK MENDAPATKAN BARCODE REGISTRASI ACARA</p>
+                <p>SILAHKAN KLIK KONFIRMASI KEHADIRAN DI BAWAH INI SEBELUM TANGGAL</p>
+                <p class="tanggal-rsvp">20 MARET 2027</p>
+                <a class="link-tombol-konfirmasi-kehadiran" href="https://wa.me/6281392093228?text=halo" target="_blank" rel="nofollow">
+                    <span class="wrapper-konfirmasi-kehadiran">
+                        <span class="ikon-konfirmasi-kehadiran"></span>
+                        <p>KONFIRMASI</p>
+                        <p>KEHADIRAN</p>
+                    </span>
+                </a>
+                <p>ATAS KEHADIRAN BAPAK/IBU/SAUDARA, KAMI UCAPKAN</p>
+                <p>TERIMA KASIH</p>
+                <a class="simpan-acara-button" href="https://www.google.com/calendar/render?action=TEMPLATE&amp;text=Acara%20Pernikahan%20&amp;details&amp;dates=20240418T080000/20241231T170000&amp;location" target="_blank" rel="nofollow">
+                    SIMPAN ACARA
+                </a>
             </div>
         </div>
-        
-        <div id="notification" class="notification"></div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Inisialisasi Supabase
-        const SUPABASE_URL = 'https://uptkhybrwikkbfaqypve.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwdGtoeWJyd2lra2JmYXF5cHZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNDQ5NTksImV4cCI6MjA2OTcyMDk1OX0.fTfMeSy03acVv49QuFOGQDL9P9AZeS19mp91tahsvkc';
-        
-        const { createClient } = window.supabase;
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const commentForm = document.getElementById('comment-form');
-            const commentsList = document.getElementById('comments-list');
-            const commentsCount = document.getElementById('comments-count');
-            const notification = document.getElementById('notification');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const noComments = document.getElementById('no-comments');
-            const shareBtn = document.getElementById('share-btn');
-            
-            // Tampilkan spinner saat memuat data
-            loadingSpinner.style.display = 'block';
-            noComments.style.display = 'none';
-            
-            // Load komentar dari database
-            loadComments();
-            
-            // Handle form submission
-            commentForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Ambil nilai form
-                const name = document.getElementById('author').value.trim();
-                const message = document.getElementById('comment').value.trim();
-                
-                // Validasi input
-                if (!name || !message) {
-                    showNotification('error', 'Nama dan ucapan harus diisi!');
-                    return;
-                }
-                
-                // Kirim komentar ke database
-                try {
-                    const { data, error } = await supabase
-                        .from('comments')
-                        .insert([
-                            { 
-                                name: name, 
-                                message: message,
-                                is_reply: false,
-                                parent_id: null
-                            }
-                        ]);
-                    
-                    if (error) throw error;
-                    
-                    // Muat ulang komentar
-                    loadComments();
-                    
-                    // Reset form
-                    commentForm.reset();
-                    
-                    // Tampilkan notifikasi
-                    showNotification('success', 'Ucapan Anda berhasil dikirim!');
-                } catch (error) {
-                    console.error('Error:', error);
-                    showNotification('error', 'Terjadi kesalahan: ' + error.message);
-                }
+        // Fungsi untuk membuka undangan
+        function bukaUndangan() {
+            const Music = document.getElementById('music');
+            const PlayPauseMusicButton = document.getElementById('play-pause-music');
+            // Handle error jika elemen tidak ditemukan
+            if(!Music || !PlayPauseMusicButton) {
+                console.error('Elemen musik tidak ditemukan');
+                // Sembunyikan tombol jika ada
+                if(PlayPauseMusicButton) PlayPauseMusicButton.style.display = 'none';
+                // Tampilkan notifikasi ke user
+                const alertBox = document.createElement('div');
+                alertBox.textContent = 'Fitur musik error';
+                alertBox.className = 'music-error-alert';
+                document.body.appendChild(alertBox);
+                return;
+            }
+            // Tampilkan dan putar ikon musik
+            PlayPauseMusicButton.style.display = 'block'; // Munculkan ikon
+            PlayPauseMusicButton.classList.add('playing'); // Langsung berputar
+            // Putar musik
+            Music.play().catch(error => {
+                console.log("Browser memblokir autoplay. Butuh interaksi pengguna.");
             });
-            
-            // Fungsi untuk membagikan link
-            shareBtn.addEventListener('click', async function() {
-                try {
-                    const currentUrl = window.location.href;
-                    
-                    if (navigator.share) {
-                        // Jika browser mendukung Web Share API
-                        await navigator.share({
-                            title: 'Buku Tamu Pernikahan',
-                            text: 'Berikan ucapan untuk pernikahan kami',
-                            url: currentUrl
-                        });
-                    } else {
-                        // Fallback untuk browser yang tidak mendukung
-                        await navigator.clipboard.writeText(currentUrl);
-                        showNotification('success', 'Link berhasil disalin ke clipboard!');
-                    }
-                } catch (err) {
-                    console.error('Error sharing:', err);
-                    showNotification('error', 'Gagal membagikan link');
+            let isMusicPlaying = true;
+            // Fungsi PlayPauseMusic
+            const PlayPauseMusic = () => {
+                if(isMusicPlaying) {
+                    Music.pause();
+                } else {
+                    Music.play().catch(handleMusicError);
                 }
-            });
-            
-            // Fungsi untuk memuat komentar dari database
-            async function loadComments() {
-                try {
-                    // Ambil komentar utama (bukan balasan)
-                    const { data: comments, error } = await supabase
-                        .from('comments')
-                        .select('*')
-                        .eq('is_reply', false)
-                        .order('created_at', { ascending: false });
-                    
-                    if (error) throw error;
-                    
-                    // Kosongkan daftar komentar
-                    commentsList.innerHTML = '';
-                    
-                    // Update jumlah komentar
-                    const commentCount = comments ? comments.length : 0;
-                    commentsCount.textContent = `${commentCount} Komentar`;
-                    
-                    // Tampilkan spinner
-                    loadingSpinner.style.display = 'block';
-                    noComments.style.display = 'none';
-                    
-                    if (!comments || comments.length === 0) {
-                        loadingSpinner.style.display = 'none';
-                        noComments.style.display = 'block';
-                        return;
-                    }
-                    
-                    // Render setiap komentar
-                    for (const comment of comments) {
-                        // Ambil balasan untuk komentar ini
-                        const { data: replies, error: replyError } = await supabase
-                            .from('comments')
-                            .select('*')
-                            .eq('parent_id', comment.id)
-                            .order('created_at', { ascending: true });
-                        
-                        if (!replyError) {
-                            comment.replies = replies || [];
-                        }
-                        
-                        const commentElement = createCommentElement(comment);
-                        commentsList.appendChild(commentElement);
-                    }
-                    
-                    // Sembunyikan spinner
-                    loadingSpinner.style.display = 'none';
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    showNotification('error', 'Gagal memuat komentar: ' + error.message);
-                    loadingSpinner.style.display = 'none';
-                    noComments.style.display = 'block';
+                isMusicPlaying = !isMusicPlaying;
+                updatePlayPauseMusicButton();
+            }
+            // Gambar icon untuk play dan pause music
+            const playMusicIcon = '/assets/images/vinyl.png'; // Bisa diganti jika ingin beda ikon saat pause
+            const pauseMusicIcon = '/assets/images/vinyl.png'; 
+            // Update ikon play/pause music
+            const updatePlayPauseMusicButton = () => {
+                if(isMusicPlaying) {
+                    PlayPauseMusicButton.classList.add('playing');
+                } else {
+                    PlayPauseMusicButton.classList.remove('playing');
                 }
             }
-            
-            // Fungsi untuk membuat elemen komentar
-            function createCommentElement(comment, isReply = false) {
-                const commentElement = document.createElement('div');
-                commentElement.className = `comment ${isReply ? 'reply' : ''}`;
-                
-                // Format tanggal
-                const date = new Date(comment.created_at);
-                const formattedDate = date.toLocaleString('id-ID', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                // Avatar berdasarkan inisial nama
-                const initials = comment.name.split(' ')
-                    .map(part => part[0])
-                    .join('')
-                    .substring(0, 2)
-                    .toUpperCase();
-                
-                commentElement.innerHTML = `
-                    <div class="comment-header">
-                        <div class="comment-author">
-                            <div class="avatar">${initials}</div>
-                            <div>
-                                <div class="author-name">${comment.name}</div>
-                                <div class="comment-timestamp">${formattedDate}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="comment-text">${comment.message}</div>
-                    <div class="comment-actions">
-                        <div class="action-btn like-btn" data-id="${comment.id}">
-                            <i class="far fa-heart"></i> Suka
-                        </div>
-                        <div class="action-btn reply-btn" data-id="${comment.id}">
-                            <i class="far fa-comment-dots"></i> Balas
-                        </div>
-                    </div>
-                    <div class="reply-form" id="reply-form-${comment.id}">
-                        <form class="reply-comment-form" data-parent-id="${comment.id}">
-                            <div class="form-group">
-                                <label>Nama <span class="required">*</span></label>
-                                <input type="text" class="reply-author" required placeholder="Masukkan nama Anda">
-                            </div>
-                            <div class="form-group">
-                                <label>Balasan <span class="required">*</span></label>
-                                <textarea class="reply-text" required minlength="2" placeholder="Tulis balasan Anda..."></textarea>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" class="cancel-reply-btn reset-btn">Batal</button>
-                                <button type="submit" class="submit-reply-btn submit-btn">Kirim Balasan</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="replies" id="replies-${comment.id}"></div>
-                `;
-                
-                // Event listener untuk tombol balas
-                const replyButton = commentElement.querySelector('.reply-btn');
-                replyButton.addEventListener('click', function() {
-                    const replyForm = document.getElementById(`reply-form-${comment.id}`);
-                    replyForm.classList.toggle('active');
-                });
-                
-                // Event listener untuk form balasan
-                const replyForm = commentElement.querySelector('.reply-comment-form');
-                replyForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    handleReplySubmit(comment.id, this);
-                });
-                
-                // Event listener untuk tombol batal
-                const cancelButton = commentElement.querySelector('.cancel-reply-btn');
-                cancelButton.addEventListener('click', function() {
-                    replyForm.closest('.reply-form').classList.remove('active');
-                });
-                
-                // Render balasan jika ada
-                if (comment.replies && comment.replies.length > 0) {
-                    const repliesContainer = commentElement.querySelector(`#replies-${comment.id}`);
-                    comment.replies.forEach(reply => {
-                        const replyElement = createCommentElement(reply, true);
-                        repliesContainer.appendChild(replyElement);
-                    });
-                }
-                
-                return commentElement;
+            // Handle error music
+            const handleMusicError = (error) => {
+                console.error('Error music:', error);
+                PlayPauseMusicButton.style.backgroundColor = '#ffcccc';
+                PlayPauseMusicButton.textContent = 'Error';
             }
-            
-            // Fungsi untuk menangani submit balasan
-            async function handleReplySubmit(parentId, form) {
-                const name = form.querySelector('.reply-author').value.trim();
-                const message = form.querySelector('.reply-text').value.trim();
-                
-                // Validasi input
-                if (!name || !message) {
-                    showNotification('error', 'Nama dan balasan harus diisi!');
-                    return;
-                }
-                
-                try {
-                    // Kirim balasan ke database
-                    const { data, error } = await supabase
-                        .from('comments')
-                        .insert([
-                            { 
-                                name: name, 
-                                message: message,
-                                is_reply: true,
-                                parent_id: parentId
-                            }
-                        ]);
-                    
-                    if (error) throw error;
-                    
-                    // Muat ulang komentar
-                    loadComments();
-                    
-                    // Reset form
-                    form.reset();
-                    form.closest('.reply-form').classList.remove('active');
-                    
-                    // Tampilkan notifikasi
-                    showNotification('success', 'Balasan Anda berhasil dikirim!');
-                } catch (error) {
-                    console.error('Error:', error);
-                    showNotification('error', 'Terjadi kesalahan: ' + error.message);
-                }
-            }
-            
-            // Fungsi untuk menampilkan notifikasi
-            function showNotification(type, message) {
-                notification.textContent = message;
-                notification.className = `notification ${type}`;
-                notification.style.display = 'block';
-                
-                // Sembunyikan notifikasi setelah 3 detik
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-            }
+            // Event listener untuk tombol
+            PlayPauseMusicButton.addEventListener('click', PlayPauseMusic);
+            // Tampilkan undangan section
+            const UndanganDibuka = document.getElementById('undangan_dibuka');
+            // Trigger reflow untuk inisialisasi animasi
+            void UndanganDibuka.offsetHeight;
+            // Tambahkan class animasi container
+            UndanganDibuka.classList.add('show');
+        }
+        document.getElementById('buka-undangan-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            bukaUndangan();     // Langsung panggil fungsi tanpa ubah hash
         });
+        const targetSection = document.getElementById('undangan_dibuka');
+        targetSection.scrollIntoView({ behavior: 'smooth' });
     </script>
 </body>
 </html>
