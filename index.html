@@ -1,134 +1,63 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>The Wedding of Huda and Qisthin - Kang Santri Digital Invitations</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <title>Tes Login Firebase</title>
 </head>
 <body>
-    <div class="container-content">
-        <div class="content">
-            <div class="container-buka-undangan-button">
-                <a href="#undangan_dibuka" id="buka-undangan-button">
-                    <span class="wrapper-text-buka-undangan-button">Buka Undangan</span>
-                </a>
-            </div>
-            <div class="container-music-player">
-                <audio id="music" loop>
-                    <source src="/assets/music/maher-zain-harris-j-qalbi-fil-madinah.mp3" type="audio/mpeg">    
-                </audio>		
-                <button class="icon-button-music rotating-icon" id="play-pause-music">
-                    <img id="vinyl-icon" src="/assets/images/vinyl.png" alt="Music Icon">
-                </button>
-            </div>
-            <div id="undangan_dibuka">
-                <p>Dengan undangan ini kami mengharap kehadiran Bapak/Ibu/Saudara pada pernikahan kami</p>
-                <p>Rokhmatul Huda</p>
-                <a class="link_ig_pengantin_putra" href="https://www.instagram.com/philosolver_0/" target="_blank">
-                    <img id="ikon_ig_pengantin_putra" src="/assets/images/icon_IG.png" alt="IG Pengantin Wanita" style="width: 50px; height: 50px;">
-                </a>
-                <p>dan</p>
-                <p>Qisthin Halimah Istihsanah</p>
-                <a class="link_ig_pengantin_putri" href="https://www.instagram.com/qisthi_syarief/" target="_blank">
-                    <img id="ikon_ig_pengantin_putri" src="/assets/images/icon_IG.png" alt="IG Pengantin Wanita" style="width: 50px; height: 50px;">
-                </a>
-                <p>yang akan dilaksanakan pada hari</p>
-                <p>Senin, 26 Maret 2027</p>
-                <p>di Gedung Serbaguna, Jalan Raya No. 123, Jakarta</p>
-                <a class="link-tombol-lokasi" href="https://www.google.com/maps/dir//Batujajar+Bar.,+Kec.+Batujajar,+Kabupaten+Bandung+Barat,+Jawa+Barat+40561/@-6.9182235,107.4124403,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x2e68e54436f9287b:0x35604fef7c4c7346!2m2!1d107.4948422!2d-6.9182306?hl=in-ID&entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="nofollow">    
-                    <span class="wrapper-text-lokasi">LOKASI</span>    
-                </a>
-                <div class="google-map">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63375.07012847685!2d107.43590785315173!3d-6.897554783903577!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e4e1c1acecb9%3A0x75e17b3d243e2f1b!2sDanau%20Wakadobol!5e0!3m2!1sid!2sid!4v1754512554541!5m2!1sid!2sid" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-                <p>UNTUK MENDAPATKAN BARCODE REGISTRASI ACARA</p>
-                <p>SILAHKAN KLIK KONFIRMASI KEHADIRAN DI BAWAH INI SEBELUM TANGGAL</p>
-                <p class="tanggal-rsvp">20 MARET 2027</p>
-                <a class="link-tombol-konfirmasi-kehadiran" href="https://wa.me/6281392093228?text=halo" target="_blank" rel="nofollow">
-                    <span class="wrapper-konfirmasi-kehadiran">
-                        <span class="ikon-konfirmasi-kehadiran"></span>
-                        <p>KONFIRMASI</p>
-                        <p>KEHADIRAN</p>
-                    </span>
-                </a>
-                <p>ATAS KEHADIRAN BAPAK/IBU/SAUDARA, KAMI UCAPKAN</p>
-                <p>TERIMA KASIH</p>
-                <a class="simpan-acara-button" href="https://www.google.com/calendar/render?action=TEMPLATE&amp;text=Acara%20Pernikahan%20&amp;details&amp;dates=20240418T080000/20241231T170000&amp;location" target="_blank" rel="nofollow">
-                    SIMPAN ACARA
-                </a>
-            </div>
-        </div>
-    </div>
+    <h1>Tes Otentikasi Firebase Redirect</h1>
+    <button id="login-btn">Login dengan Google</button>
+    
+    <h2>Status:</h2>
+    <pre id="status">Menunggu...</pre>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
     <script>
-        // Fungsi untuk membuka undangan
-        function bukaUndangan() {
-            const Music = document.getElementById('music');
-            const PlayPauseMusicButton = document.getElementById('play-pause-music');
-            // Handle error jika elemen tidak ditemukan
-            if(!Music || !PlayPauseMusicButton) {
-                console.error('Elemen musik tidak ditemukan');
-                // Sembunyikan tombol jika ada
-                if(PlayPauseMusicButton) PlayPauseMusicButton.style.display = 'none';
-                // Tampilkan notifikasi ke user
-                const alertBox = document.createElement('div');
-                alertBox.textContent = 'Fitur musik error';
-                alertBox.className = 'music-error-alert';
-                document.body.appendChild(alertBox);
-                return;
-            }
-            // Tampilkan dan putar ikon musik
-            PlayPauseMusicButton.style.display = 'block'; // Munculkan ikon
-            PlayPauseMusicButton.classList.add('playing'); // Langsung berputar
-            // Putar musik
-            Music.play().catch(error => {
-                console.log("Browser memblokir autoplay. Butuh interaksi pengguna.");
-            });
-            let isMusicPlaying = true;
-            // Fungsi PlayPauseMusic
-            const PlayPauseMusic = () => {
-                if(isMusicPlaying) {
-                    Music.pause();
-                } else {
-                    Music.play().catch(handleMusicError);
-                }
-                isMusicPlaying = !isMusicPlaying;
-                updatePlayPauseMusicButton();
-            }
-            // Gambar icon untuk play dan pause music
-            const playMusicIcon = '/assets/images/vinyl.png'; // Bisa diganti jika ingin beda ikon saat pause
-            const pauseMusicIcon = '/assets/images/vinyl.png'; 
-            // Update ikon play/pause music
-            const updatePlayPauseMusicButton = () => {
-                if(isMusicPlaying) {
-                    PlayPauseMusicButton.classList.add('playing');
-                } else {
-                    PlayPauseMusicButton.classList.remove('playing');
-                }
-            }
-            // Handle error music
-            const handleMusicError = (error) => {
-                console.error('Error music:', error);
-                PlayPauseMusicButton.style.backgroundColor = '#ffcccc';
-                PlayPauseMusicButton.textContent = 'Error';
-            }
-            // Event listener untuk tombol
-            PlayPauseMusicButton.addEventListener('click', PlayPauseMusic);
-            // Tampilkan undangan section
-            const UndanganDibuka = document.getElementById('undangan_dibuka');
-            // Trigger reflow untuk inisialisasi animasi
-            void UndanganDibuka.offsetHeight;
-            // Tambahkan class animasi container
-            UndanganDibuka.classList.add('show');
-        }
-        document.getElementById('buka-undangan-button').addEventListener('click', function(e) {
-            e.preventDefault();
-            bukaUndangan();     // Langsung panggil fungsi tanpa ubah hash
+        // GANTI DENGAN KONFIGURASI FIREBASE ANDA
+        const firebaseConfig = {
+            apiKey: "AIzaSyDVxB17qbKXMrUXMbltmVmzBx-qzx6JNZk",
+            authDomain: "jurnal-harian-guru-digital.firebaseapp.com",
+            projectId: "jurnal-harian-guru-digital",
+            storageBucket: "jurnal-harian-guru-digital.firebasestorage.app",
+            messagingSenderId: "288090394167",
+            appId: "1:288090394167:web:3a3fac7de7d445a3de39b2",
+            measurementId: "G-BSXRB4SXS0"
+        };
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const statusEl = document.getElementById('status');
+
+        // Fungsi untuk memulai login
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithRedirect(provider);
         });
-        const targetSection = document.getElementById('undangan_dibuka');
-        targetSection.scrollIntoView({ behavior: 'smooth' });
+
+        // Cek hasil redirect saat halaman dimuat
+        auth.getRedirectResult()
+            .then((result) => {
+                statusEl.textContent = 'Hasil getRedirectResult:\n' + JSON.stringify(result, null, 2);
+                if (result.user) {
+                    console.log("Login berhasil!", result.user);
+                }
+            })
+            .catch((error) => {
+                statusEl.textContent = 'Error:\n' + error.message;
+                console.error("Error:", error);
+            });
+
+        // Listener utama
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log("onAuthStateChanged: User login", user);
+            } else {
+                console.log("onAuthStateChanged: User logout");
+            }
+        });
     </script>
 </body>
 </html>
-
